@@ -1,9 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 548" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif">
-<defs>
-  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-    <path d="M 0 1 L 9 5 L 0 9 z" fill="#898781"/>
-  </marker>
-</defs>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#898781"/></marker></defs>
 <rect x="0" y="0" width="1160" height="548" rx="12" fill="#fcfcfb"/>
 <rect x="368" y="24" width="456" height="118" rx="10" fill="rgba(237,161,0,0.05)" stroke="#eda100" stroke-width="1.5"/>
 <rect x="384" y="39" width="9" height="9" rx="2" fill="#eda100"/>
@@ -41,10 +37,10 @@
 <text x="146.0" y="450.5" font-size="12.5" font-weight="500" text-anchor="middle" fill="#0b0b0b">git commit</text>
 <line x1="248" y1="294" x2="346" y2="294" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
 <line x1="248" y1="446" x2="346" y2="446" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-<path d="M 486 124 C 486 184.0, 668 184.0, 668 244" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arr)"/>
-<path d="M 706 124 C 706 184.0, 756 184.0, 756 244" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arr)"/>
-<text x="536" y="196" font-size="11" text-anchor="end" fill="#898781">las skills leen</text>
-<text x="776" y="196" font-size="11" text-anchor="start" fill="#898781">calibra qué exigir</text>
+<path d="M 486 124 C 486 187, 668 181, 668 244" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arr)"/>
+<path d="M 706 124 C 706 187, 756 181, 756 244" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arr)"/>
+<text x="536" y="196" font-size="11" text-anchor="end" stroke="#fcfcfb" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#898781">las skills leen</text>
+<text x="776" y="196" font-size="11" text-anchor="start" stroke="#fcfcfb" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#898781">calibra qué exigir</text>
 <rect x="872" y="268" width="264" height="52" rx="24" fill="rgba(12,163,12,0.06)" stroke="#0ca30c" stroke-width="1.2"/>
 <circle cx="898" cy="294.0" r="9" fill="none" stroke="#0ca30c" stroke-width="1.5"/>
 <path d="M 893.5 294.0 l 3 3.2 l 6 -6.4" fill="none" stroke="#0ca30c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

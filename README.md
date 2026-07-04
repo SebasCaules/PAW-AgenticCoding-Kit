@@ -85,25 +85,10 @@ Instalá el tooling de Claude Code desde <ruta>/paw-claude-kit:
 
 ## El día a día con el kit
 
-```mermaid
-flowchart LR
-    ID(["feature nueva"]) --> PL["/plan<br/><i>plan por fases</i>"]
-    PL --> IM["/impl<br/><i>código fase a fase</i>"]
-    IM --> GP["/gp<br/><i>reglas del corrector</i>"]
-    GP --> CM(["git commit"])
-    CM --> GT{{"commit-gate<br/>paw_checks.py"}}
-    GT -- "checks OK" --> OK(["commit pasa"])
-    GT -- "falla" --> GP
-
-    classDef vos fill:#EDE9FE,stroke:#7C3AED,color:#312E81
-    classDef kit fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A
-    classDef gate fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E
-    classDef ok fill:#DCFCE7,stroke:#16A34A,color:#14532D
-    class ID,CM vos
-    class PL,IM,GP kit
-    class GT gate
-    class OK ok
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/dia-a-dia-dark.svg">
+  <img src="assets/dia-a-dia-light.svg" width="100%" alt="Flujo del día a día: feature nueva, /plan (plan por fases), /impl (código fase a fase), /gp (reglas del corrector), git commit y commit-gate con paw_checks.py; si los checks pasan el commit pasa, si fallan se vuelve a /gp.">
+</picture>
 
 | Momento | Qué hacés |
 |---|---|
@@ -123,22 +108,10 @@ PAW cambia de reglas en cada entrega: auditar un TP1 con reglas de Hibernate, o 
 reglas de JSP, genera falsos positivos. Por eso el kit lee la etapa declarada en tu
 `CLAUDE.md`, y las skills de planificación y auditoría ajustan qué exigir.
 
-```mermaid
-flowchart LR
-    E1["<b>Entrega 1 — Spring JDBC</b><br/>JdbcTemplate · RowMapper<br/>modelos inmutables"]
-    E2["<b>Entrega 2 — JPA / Hibernate</b><br/>entidades · EntityManager<br/>las 9 trampas TP2"]
-    EF["<b>Entrega Final — API REST + SPA</b><br/>Jersey · JWT · DTOs con links<br/>frontend aparte"]
-
-    E1 == "/jdbc-to-jpa<br/>un agregado por vez" ==> E2
-    E2 == "contrato REST primero,<br/>backend por olas ⇄ SPA" ==> EF
-
-    classDef e1 fill:#DCFCE7,stroke:#16A34A,color:#14532D
-    classDef e2 fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A
-    classDef ef fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
-    class E1 e1
-    class E2 e2
-    class EF ef
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/etapas-dark.svg">
+  <img src="assets/etapas-light.svg" width="100%" alt="Las tres etapas: Entrega 1 con Spring JDBC (JdbcTemplate, RowMapper, modelos inmutables); de ahí a la Entrega 2 con JPA/Hibernate (entidades, EntityManager, las 9 trampas TP2) con /jdbc-to-jpa, un agregado por vez; y de ahí a la Entrega Final con API REST + SPA (Jersey, JWT, DTOs con links, frontend aparte), con el contrato REST primero y backend por olas en espejo con la SPA.">
+</picture>
 
 ```markdown
 ## Etapa de la cursada          ← esto va en el CLAUDE.md de tu repo
@@ -250,21 +223,10 @@ python3 tools/export.py --target gemini --out /ruta/a/tu/repo   # GEMINI.md + .g
 python3 tools/export.py --target agents --out /ruta/a/tu/repo   # AGENTS.md genérico + prompts/
 ```
 
-```mermaid
-flowchart LR
-    K["<b>PAW-AgenticCoding-Kit</b><br/><i>nativo Claude Code</i>"]
-    K == "--target codex" ==> CX["AGENTS.md<br/>.codex/prompts/*.md"]
-    K == "--target gemini" ==> GM["GEMINI.md<br/>.gemini/commands/paw/*.toml"]
-    K == "--target agents" ==> AG["AGENTS.md genérico + prompts/*.md<br/>Cursor · Windsurf · aider"]
-    K -. "siempre" .-> PCM["tools/paw_checks.py<br/>+ pre-commit hook de git"]
-
-    classDef kit fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A
-    classDef tgt fill:#FEF3C7,stroke:#D97706,color:#78350F
-    classDef chk fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E
-    class K kit
-    class CX,GM,AG tgt
-    class PCM chk
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/export-dark.svg">
+  <img src="assets/export-light.svg" width="100%" alt="El exportador: desde PAW-AgenticCoding-Kit, --target codex genera AGENTS.md y .codex/prompts/*.md; --target gemini genera GEMINI.md y .gemini/commands/paw/*.toml; --target agents genera un AGENTS.md genérico con prompts/*.md para Cursor, Windsurf o aider. En todos los casos copia tools/paw_checks.py y un pre-commit hook de git.">
+</picture>
 
 Las 18 skills se convierten en comandos o prompts del tool destino, las reglas operativas van
 a un `AGENTS.md`/`GEMINI.md`, y el hook de commit se traduce a un pre-commit hook de git
