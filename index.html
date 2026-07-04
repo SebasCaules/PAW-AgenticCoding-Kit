@@ -1,0 +1,2786 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>paw-claude-kit — manual de supervivencia para cursar PAW con agentes</title>
+<meta name="description" content="18 skills, 4 hooks y checks determinísticos para cursar PAW (ITBA) con Claude Code — nacido de una meta-auditoría de ~113 sesiones sobre un TP real.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<script>
+/* tema antes del primer paint (dark = default de marca StudyVaults) */
+(function(){
+  var saved = null;
+  try { saved = localStorage.getItem('paw-theme'); } catch(e) {}
+  document.documentElement.dataset.theme = (saved === 'light' || saved === 'dark') ? saved : 'dark';
+})();
+</script>
+<style>
+/* ============================================================
+   paw-claude-kit · sistema de diseño "Technical Split"
+   (tokens y lenguaje visual de StudyVaults ITBA)
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* ---- las 6 hex base de StudyVaults ---- */
+  --hex-brown:#241208;
+  --hex-brown-soft:#382519;
+  --hex-zinc:#27272a;
+  --hex-blue:#92cff2;
+  --hex-gray:#a1a1aa;
+  --hex-coral:#f47c59;
+  --hex-white:#ffffff;
+
+  --primary:var(--hex-blue);
+  --accent:var(--hex-coral);
+
+  --font-display:'Newsreader',Georgia,'Times New Roman',serif;
+  --font-body:'Newsreader',Georgia,'Times New Roman',serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+
+  --s-1:8px;--s-2:16px;--s-3:24px;--s-4:32px;--s-5:48px;--s-6:64px;--s-7:80px;
+  --r-card:8px;--r-ctrl:8px;--r-pill:9999px;
+
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --dur-fast:240ms;--dur:420ms;--dur-slow:680ms;
+  --nav-h:64px;
+
+  /* code block: fijo en ambos temas */
+  --code-bg:#1b1f24;
+  --code-bar:#22272e;
+  --code-fg:#adbac7;
+  --code-hairline:color-mix(in srgb,#ffffff 9%,transparent);
+
+  --status-go:#46a86e;
+  --status-promo:#2f9f8f;
+  --status-warn:#d8b279;
+  --status-caution:#d68f85;
+}
+[data-theme="dark"]{
+  --background:color-mix(in srgb,var(--hex-brown-soft) 90%,var(--hex-white));
+  --surface:var(--hex-brown-soft);
+  --text-primary:var(--hex-white);
+  --text-secondary:var(--hex-gray);
+  --ink-strong:var(--hex-white);
+  --border:var(--hex-zinc);
+  --on-accent-ink:var(--hex-brown);
+  --surface-2:color-mix(in srgb,var(--hex-brown-soft) 84%,var(--hex-white));
+  --surface-3:color-mix(in srgb,var(--hex-brown-soft) 76%,var(--hex-white));
+  --nav-bg:color-mix(in srgb,var(--background) 86%,transparent);
+  --hairline:color-mix(in srgb,var(--hex-white) 10%,transparent);
+  --hairline-strong:color-mix(in srgb,var(--hex-white) 18%,transparent);
+  --row-hover:color-mix(in srgb,var(--hex-white) 4%,transparent);
+  --primary-soft:color-mix(in srgb,var(--hex-blue) 14%,transparent);
+  --accent-soft:color-mix(in srgb,var(--hex-coral) 16%,transparent);
+  --primary-line:color-mix(in srgb,var(--hex-blue) 40%,transparent);
+  --accent-line:color-mix(in srgb,var(--hex-coral) 40%,transparent);
+  --accent-text:var(--hex-coral);
+  --link:var(--hex-blue);
+  --ring:var(--hex-blue);
+  --shadow-sm:0 2px 8px color-mix(in srgb,var(--hex-brown) 28%,transparent);
+  --shadow-md:0 10px 30px color-mix(in srgb,var(--hex-brown) 42%,transparent);
+  --shadow-lg:0 24px 60px color-mix(in srgb,var(--hex-brown) 52%,transparent);
+  --shadow-primary:0 12px 28px color-mix(in srgb,var(--hex-blue) 40%,transparent);
+  --shadow-accent:0 12px 28px color-mix(in srgb,var(--hex-coral) 45%,transparent);
+  --glow-coral:color-mix(in srgb,var(--hex-coral) 16%,transparent);
+  --glow-blue:color-mix(in srgb,var(--hex-blue) 16%,transparent);
+  --glow-blue-2:color-mix(in srgb,var(--hex-blue) 10%,transparent);
+  --particle-blue:color-mix(in srgb,var(--hex-blue) 55%,transparent);
+  --particle-coral:color-mix(in srgb,var(--hex-coral) 50%,transparent);
+  color-scheme:dark;
+}
+[data-theme="light"]{
+  --background:color-mix(in srgb,var(--hex-white) 96%,var(--hex-brown) 4%);
+  --surface:var(--hex-brown);
+  --text-primary:var(--hex-brown);
+  --text-secondary:color-mix(in srgb,var(--hex-brown) 60%,var(--hex-white));
+  --ink-strong:var(--hex-brown);
+  --border:color-mix(in srgb,var(--hex-zinc) 14%,var(--hex-white));
+  --on-accent-ink:var(--hex-brown);
+  --surface-2:var(--hex-white);
+  --surface-3:color-mix(in srgb,var(--hex-white) 94%,var(--hex-brown) 6%);
+  --nav-bg:color-mix(in srgb,var(--hex-white) 82%,transparent);
+  --hairline:color-mix(in srgb,var(--hex-brown) 12%,transparent);
+  --hairline-strong:color-mix(in srgb,var(--hex-brown) 20%,transparent);
+  --row-hover:color-mix(in srgb,var(--hex-brown) 4%,transparent);
+  --primary-soft:color-mix(in srgb,var(--hex-blue) 22%,var(--hex-white));
+  --accent-soft:color-mix(in srgb,var(--hex-coral) 18%,var(--hex-white));
+  --primary-line:color-mix(in srgb,var(--hex-blue) 55%,var(--hex-brown));
+  --accent-line:color-mix(in srgb,var(--hex-coral) 50%,var(--hex-white));
+  --accent-text:color-mix(in srgb,var(--hex-coral) 62%,var(--hex-brown));
+  --link:color-mix(in srgb,var(--hex-blue) 55%,var(--hex-brown));
+  --ring:color-mix(in srgb,var(--hex-blue) 55%,var(--hex-brown));
+  --shadow-sm:0 2px 8px color-mix(in srgb,var(--hex-brown) 8%,transparent);
+  --shadow-md:0 10px 30px color-mix(in srgb,var(--hex-brown) 12%,transparent);
+  --shadow-lg:0 24px 60px color-mix(in srgb,var(--hex-brown) 16%,transparent);
+  --shadow-primary:0 12px 28px color-mix(in srgb,var(--hex-blue) 30%,transparent);
+  --shadow-accent:0 12px 28px color-mix(in srgb,var(--hex-coral) 35%,transparent);
+  --glow-coral:color-mix(in srgb,var(--hex-coral) 8%,transparent);
+  --glow-blue:color-mix(in srgb,var(--hex-blue) 9%,transparent);
+  --glow-blue-2:color-mix(in srgb,var(--hex-blue) 6%,transparent);
+  --particle-blue:color-mix(in srgb,var(--hex-blue) 38%,transparent);
+  --particle-coral:color-mix(in srgb,var(--hex-coral) 34%,transparent);
+  --status-go:#2e7d52;
+  --status-promo:#16745c;
+  --status-warn:#8a591c;
+  --status-caution:#b23a28;
+  color-scheme:light;
+}
+:root:not([data-theme]){color-scheme:dark}
+
+/* ---- alias del namespace previo del kit → tokens Technical Split ---- */
+:root{
+  --bg:var(--background);
+  --bg-raised:var(--surface-2);
+  --bg-dip:color-mix(in srgb,var(--surface-2) 45%,var(--background));
+  --ink:var(--text-primary);
+  --ink-dim:var(--text-secondary);
+  --ice:var(--link);
+  --ice-soft:var(--primary-soft);
+  --ok:var(--status-go);
+  --bad:var(--status-caution);
+  --line:var(--hairline-strong);
+  --tape:transparent;
+  --shadow-hard:transparent;
+  --grain-opacity:0;
+  --term-bg:var(--code-bg);
+  --term-edge:var(--code-hairline);
+  --term-ink:var(--code-fg);
+  --term-bright:#dfe7ee;
+  --t-ok:#7cc794;--t-err:#e88a7a;--t-hl:var(--hex-coral);
+  --font-hand:var(--font-mono);
+  --radius:var(--r-card);
+}
+[data-theme="dark"]{--bg:var(--background)} /* fuerza recomputo de alias por tema */
+
+html{scroll-behavior:smooth;scroll-padding-top:5.5rem}
+body{
+  background:var(--background);color:var(--text-primary);font-family:var(--font-body);
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  transition:background var(--dur) var(--ease),color var(--dur) var(--ease);
+}
+::selection{background:var(--accent);color:var(--on-accent-ink)}
+img,svg{max-width:100%}
+a{color:var(--link)}
+main{position:relative;z-index:1}
+
+/* ---- ambient: gradiente animado + partículas (firma StudyVaults) ---- */
+.ambient{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.ambient__grad{
+  position:absolute;inset:-30%;
+  background:
+    radial-gradient(38% 38% at 16% 18%,var(--glow-blue),transparent 62%),
+    radial-gradient(44% 44% at 84% 26%,var(--glow-coral),transparent 64%),
+    radial-gradient(48% 48% at 50% 92%,var(--glow-blue-2),transparent 62%);
+  filter:blur(10px);
+  animation:ambient-drift 26s var(--ease) infinite alternate;
+  will-change:transform;
+}
+@keyframes ambient-drift{
+  0%{transform:translate3d(-3%,-2%,0) scale(1.02)}
+  50%{transform:translate3d(2%,1%,0) scale(1.06)}
+  100%{transform:translate3d(3%,-1%,0) scale(1.03)}
+}
+.ambient__canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.6}
+
+/* ============ tipografía ============ */
+h1,h2,h3,h4{
+  font-family:var(--font-display);font-weight:500;
+  line-height:1.12;letter-spacing:-0.01em;text-wrap:balance;color:var(--ink-strong);
+}
+.section-title{font-size:clamp(2rem,4.4vw,3.1rem);margin-bottom:14px}
+.section-title em,.hero-em{font-style:italic;font-weight:500;color:var(--accent-text)}
+.section-lede{color:var(--text-secondary);font-size:clamp(1.02rem,1.7vw,1.18rem);max-width:44rem;margin-bottom:2.4rem}
+.kicker{
+  font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--text-secondary);margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.kicker::before{content:"";width:22px;height:1px;background:var(--accent);flex:none}
+.prose p{margin-bottom:1.1rem;color:var(--text-secondary)}
+.prose strong{color:var(--ink-strong);font-weight:600}
+.prose a{color:var(--link);text-decoration:underline;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--link) 40%,transparent)}
+.prose a:hover{text-decoration-color:var(--link)}
+code{font-family:var(--font-mono);font-size:.8em;background:var(--surface-3);border:1px solid var(--hairline);border-radius:6px;padding:.14em .42em;color:var(--ink-strong)}
+pre code{background:none;border:none;padding:0}
+
+/* ---- neutralización de restos "apunte" (los fragmentos los retiran) ---- */
+.u{white-space:normal}
+.u::after{display:none}
+.scribble{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-text)}
+.stamp{
+  display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);
+  font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  padding:6px 12px;border-radius:var(--r-pill);border:1px solid var(--accent-line);
+  background:var(--accent-soft);color:var(--accent-text);transform:none;box-shadow:none;opacity:1;
+}
+.stamp.ok{background:color-mix(in srgb,var(--status-go) 14%,transparent);border-color:color-mix(in srgb,var(--status-go) 45%,transparent);color:var(--status-go)}
+.stamp.ice{background:var(--primary-soft);border-color:var(--primary-line);color:var(--link)}
+.tape::before{display:none}
+.paw-trail{display:none}
+
+/* ============ layout ============ */
+.container{max-width:1120px;margin-inline:auto;padding-inline:clamp(18px,4vw,32px)}
+.container.narrow{max-width:760px}
+.section{padding-block:clamp(64px,9vw,104px);position:relative}
+.section.alt{background:var(--bg-dip);border-block:1px solid var(--hairline)}
+
+/* ============ nav ============ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;height:var(--nav-h);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:var(--nav-bg);border-bottom:1px solid transparent;
+  transition:border-color var(--dur-fast) var(--ease),background var(--dur) var(--ease);
+}
+.nav.scrolled{border-bottom-color:var(--hairline)}
+.nav-inner{max-width:1120px;height:100%;margin-inline:auto;padding-inline:clamp(18px,4vw,32px);display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:var(--font-mono);font-weight:600;font-size:13px;letter-spacing:.02em;color:var(--ink-strong);text-decoration:none;white-space:nowrap;display:flex;align-items:center;gap:9px}
+.nav-logo::before{
+  content:"";width:15px;height:14px;background:var(--accent);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='15.5' rx='5.2' ry='4.6'/%3E%3Cellipse cx='4.6' cy='10' rx='2.3' ry='3' transform='rotate(-18 4.6 10)'/%3E%3Cellipse cx='9.4' cy='6.4' rx='2.3' ry='3.1' transform='rotate(-6 9.4 6.4)'/%3E%3Cellipse cx='14.8' cy='6.4' rx='2.3' ry='3.1' transform='rotate(6 14.8 6.4)'/%3E%3Cellipse cx='19.5' cy='10' rx='2.3' ry='3' transform='rotate(18 19.5 10)'/%3E%3C/svg%3E") no-repeat center/contain;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='15.5' rx='5.2' ry='4.6'/%3E%3Cellipse cx='4.6' cy='10' rx='2.3' ry='3' transform='rotate(-18 4.6 10)'/%3E%3Cellipse cx='9.4' cy='6.4' rx='2.3' ry='3.1' transform='rotate(-6 9.4 6.4)'/%3E%3Cellipse cx='14.8' cy='6.4' rx='2.3' ry='3.1' transform='rotate(6 14.8 6.4)'/%3E%3Cellipse cx='19.5' cy='10' rx='2.3' ry='3' transform='rotate(18 19.5 10)'/%3E%3C/svg%3E") no-repeat center/contain;
+}
+.nav-logo .p{color:var(--accent-text)}
+.nav-sys{
+  font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--text-secondary);white-space:nowrap;
+  border-left:1px solid var(--hairline-strong);padding-left:14px;
+}
+.nav-sys b{color:var(--ink-strong);font-weight:600}
+.nav-links{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{
+  font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--text-secondary);text-decoration:none;
+  padding:7px 10px;border-radius:var(--r-ctrl);white-space:nowrap;
+  transition:color var(--dur-fast) var(--ease),background var(--dur-fast) var(--ease);
+}
+.nav-links a:hover{color:var(--ink-strong);background:var(--row-hover)}
+.nav-links a.active{color:var(--accent-text);background:var(--accent-soft)}
+.theme-toggle{
+  flex:none;display:grid;place-items:center;width:34px;height:34px;cursor:pointer;
+  background:transparent;border:1px solid var(--border);border-radius:var(--r-ctrl);
+  color:var(--ink-strong);transition:background var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease);
+}
+.theme-toggle:hover{background:var(--hairline);border-color:var(--hairline-strong)}
+.theme-toggle svg{width:15px;height:15px}
+[data-theme="light"] .theme-toggle .ic-sun{display:none}
+[data-theme="dark"] .theme-toggle .ic-moon{display:none}
+
+/* ============ componentes ============ */
+.term{
+  background:var(--code-bg);border:1px solid var(--code-hairline);border-radius:var(--r-card);
+  overflow:hidden;box-shadow:var(--shadow-md);
+}
+.term-bar{display:flex;align-items:center;gap:7px;padding:10px 14px;background:var(--code-bar);border-bottom:1px solid var(--code-hairline)}
+.term-dot{width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,#ffffff 14%,transparent)}
+.term-dot:nth-child(1){background:#e5534b99}.term-dot:nth-child(2){background:#c6902299}.term-dot:nth-child(3){background:#57ab5a99}
+.term-title{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--code-fg);margin-left:6px}
+.term-body{font-family:var(--font-mono);font-size:12.5px;line-height:1.75;padding:16px 18px;overflow-x:auto;white-space:pre;color:var(--code-fg)}
+.t-cmd{color:var(--term-bright)}
+.t-cmd::before{content:"$ ";color:var(--hex-coral);font-weight:600}
+.t-ok{color:var(--t-ok)}.t-err{color:var(--t-err)}.t-dim{color:var(--code-fg);opacity:.75}.t-hl{color:var(--t-hl)}
+
+.card{
+  position:relative;background:var(--surface-2);border:1px solid var(--border);
+  border-radius:var(--r-card);padding:var(--s-3);box-shadow:var(--shadow-sm);
+  transition:transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease),border-color var(--dur) var(--ease);
+  overflow:hidden;transform:none;
+}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--hairline-strong)}
+.card::after{
+  content:"";position:absolute;left:0;top:0;height:2px;width:100%;
+  background:linear-gradient(90deg,var(--accent),var(--primary));
+  transform:scaleX(0);transform-origin:left;transition:transform var(--dur) var(--ease);
+}
+.card:hover::after{transform:scaleX(1)}
+.card h3{font-size:21px;font-weight:500;margin-bottom:8px}
+.card p{font-size:15px;line-height:1.55;color:var(--text-secondary)}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:20px}
+.card-grid>:nth-child(odd),.card-grid>:nth-child(even){--tilt:0deg}
+
+.cmd{
+  font-family:var(--font-mono);font-size:.78em;font-weight:600;letter-spacing:.02em;
+  color:var(--link);background:var(--primary-soft);border:1px solid var(--primary-line);
+  border-radius:6px;padding:.14em .5em;white-space:nowrap;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);
+  font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--text-secondary);
+  padding:5px 11px;border-radius:var(--r-pill);border:1px solid var(--hairline);
+  background:var(--surface-3);white-space:nowrap;
+}
+
+.callout{
+  border:1px solid var(--accent-line);border-left:3px solid var(--accent);
+  background:var(--accent-soft);border-radius:var(--r-card);
+  padding:18px 22px;margin-block:24px;transform:none;
+}
+.callout.ice{border-color:var(--primary-line);border-left-color:var(--primary);background:var(--primary-soft)}
+.callout p{color:var(--text-secondary);font-size:15.5px;margin:0}
+.callout p+p{margin-top:10px}
+.callout strong{color:var(--ink-strong)}
+
+pre.code{
+  background:var(--code-bg);border:1px solid var(--code-hairline);border-radius:var(--r-card);
+  padding:16px 18px;font-family:var(--font-mono);font-size:12.5px;line-height:1.7;
+  overflow-x:auto;color:var(--term-bright);box-shadow:var(--shadow-md);
+}
+.copy-wrap{position:relative}
+.copy-btn{
+  position:absolute;top:10px;right:10px;font-family:var(--font-mono);font-size:10px;
+  font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--code-fg);background:var(--code-bar);border:1px solid var(--code-hairline);
+  border-radius:6px;padding:5px 10px;cursor:pointer;
+  transition:color var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease);
+}
+.copy-btn:hover{color:var(--term-bright);border-color:color-mix(in srgb,#ffffff 25%,transparent)}
+.copy-btn.ok{color:var(--t-ok);border-color:var(--t-ok)}
+
+.stat{display:flex;flex-direction:column;gap:4px}
+.stat-n{font-family:var(--font-display);font-weight:500;font-size:clamp(2.2rem,4.5vw,3.1rem);color:var(--ink-strong);line-height:1}
+.stat-n em{font-style:italic;color:var(--accent-text)}
+.stat-l{font-family:var(--font-mono);font-size:10.5px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--text-secondary);max-width:12rem}
+.stat-row{display:flex;flex-wrap:wrap;gap:40px;row-gap:24px}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--font-mono);font-size:12px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;padding:12px 20px;border-radius:var(--r-ctrl);
+  border:1px solid transparent;background:var(--accent);color:var(--on-accent-ink);
+  text-decoration:none;line-height:1;white-space:nowrap;box-shadow:none;
+  transition:transform var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease),background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease);
+}
+.btn:hover{transform:translateY(-4px);box-shadow:var(--shadow-accent)}
+.btn:active{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink-strong);border-color:var(--border)}
+.btn.ghost:hover{background:var(--hairline);border-color:var(--hairline-strong);box-shadow:var(--shadow-md)}
+
+/* ============ reveal ============ */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity var(--dur-slow) var(--ease),transform var(--dur-slow) var(--ease)}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .ambient__grad{animation:none}
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important}
+}
+
+/* ============ footer ============ */
+.footer{position:relative;z-index:1;border-top:1px solid var(--hairline);padding-block:40px;font-size:14px;color:var(--text-secondary)}
+.footer .container{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+.footer a{color:var(--link);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+.footer-logo{font-family:var(--font-mono);font-size:12px;color:var(--ink-strong)}
+.footer-logo .p{color:var(--accent-text)}
+
+@media (max-width:820px){
+  .nav-sys{display:none}
+}
+@media (max-width:640px){
+  .term-body{font-size:11.5px}
+  .stat-row{gap:24px}
+}
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true">
+  <div class="ambient__grad"></div>
+  <canvas class="ambient__canvas"></canvas>
+</div>
+
+<nav class="nav" aria-label="Secciones">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#top"><span class="p">paw</span>-claude-kit</a>
+    <span class="nav-sys">SYS.01 // <b>PAW</b> · 18 skills · 4 hooks</span>
+    <div class="nav-links">
+      <a href="#problema">El problema</a>
+      <a href="#vistazo">El kit</a>
+      <a href="#hooks">Hooks</a>
+      <a href="#skills">Skills</a>
+      <a href="#etapas">Etapas</a>
+      <a href="#instalar">Instalar</a>
+      <a href="#export">Export</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <button class="theme-toggle" type="button" aria-label="Cambiar entre modo claro y oscuro" title="Claro / oscuro">
+      <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M20.4 14.2A8.6 8.6 0 0 1 9.8 3.6a8.6 8.6 0 1 0 10.6 10.6Z"/></svg>
+      <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5 5l1.7 1.7M17.3 17.3 19 19M19 5l-1.7 1.7M6.7 17.3 5 19"/></svg>
+    </button>
+  </div>
+</nav>
+
+<main id="top">
+<style data-section="historia">
+  /* ---- HERO ---- */
+  .historia-hero { position: relative; }
+  /* atmósfera extra MUY suave sobre el ambient global de la página */
+  .historia-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(58% 50% at 8% -8%,
+      var(--glow-coral), transparent 66%);
+  }
+  .historia-hero-inner { position: relative; z-index: 1; }
+
+  .historia-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .historia-hero-grid > * { min-width: 0; }
+  @media (min-width: 900px) {
+    .historia-hero-grid { grid-template-columns: 1.02fr 0.98fr; gap: 3.2rem; }
+  }
+
+  .historia-hero-copy { position: relative; }
+
+  /* eyebrow → micro-label mono StudyVaults (sin cuadradito ni glow) */
+  .historia-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 1.1rem;
+  }
+
+  .historia-hero-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.35rem, 1.4rem + 4.6vw, 4.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.2rem;
+    color: var(--ink-strong);
+  }
+  /* frase acento: itálica serif coral (patrón del shell, sin variation-settings) */
+  .historia-accent { font-style: italic; font-weight: 500; color: var(--accent-text); }
+
+  .historia-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin: 1.9rem 0 2.1rem;
+  }
+
+  .historia-stats {
+    margin-top: 0.4rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .historia-stamp { margin-top: 1.35rem; }
+
+  /* terminal protagonista: contenido intacto, el shell la pinta como code block */
+  .historia-hero-term .term-body {
+    overflow-x: auto;
+    font-size: clamp(0.72rem, 0.66rem + 0.35vw, 0.86rem);
+    line-height: 1.65;
+  }
+  .historia-term-indent { padding-left: 1.6em; display: inline-block; }
+
+  /* ---- EL PROBLEMA ---- */
+  .historia-fric-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.1rem;
+    margin: 2.4rem 0 2rem;
+  }
+  .historia-tag { display: inline-block; margin-bottom: 0.9rem; }
+  /* la "consecuencia": rojo suave del sistema, con hairline de separación arriba */
+  .historia-cost {
+    display: block;
+    margin-top: 0.95rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-mono);
+    font-size: 0.79rem;
+    line-height: 1.5;
+    color: var(--status-caution);
+  }
+</style>
+
+<section id="hero" class="section historia-hero">
+  <div class="container historia-hero-inner">
+    <div class="historia-hero-grid">
+
+      <div class="historia-hero-copy">
+        <p class="historia-eyebrow">Tooling de agentic coding · PAW · ITBA</p>
+        <h1 class="historia-hero-title">
+          Cursá PAW con Claude Code <span class="historia-accent">como si ya la hubieras cursado.</span>
+        </h1>
+        <p class="section-lede">
+          18 skills, 4 hooks y checks determinísticos para que Claude Code curse PAW como un
+          alumno que ya se comió todos los golpes.
+        </p>
+
+        <div class="historia-cta">
+          <a class="btn" href="#instalar">Instalarlo en 30 segundos</a>
+          <a class="btn ghost" href="#skills">Ver las 18 skills</a>
+        </div>
+
+        <div class="stat-row historia-stats">
+          <div class="stat"><span class="stat-n">~113</span><span class="stat-l">sesiones auditadas</span></div>
+          <div class="stat"><span class="stat-n">12</span><span class="stat-l">puntos de fricción</span></div>
+          <div class="stat"><span class="stat-n">18</span><span class="stat-l">skills</span></div>
+          <div class="stat"><span class="stat-n">4</span><span class="stat-l">hooks</span></div>
+        </div>
+        <span class="stamp ice historia-stamp">batalla-probado</span>
+      </div>
+
+      <div class="historia-hero-term reveal d1">
+        <div class="term">
+          <div class="term-bar">
+            <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+            <span class="term-title">zsh · rent-the-slopes</span>
+          </div>
+          <pre class="term-body"><span class="t-cmd">git commit -m "feat: filtro de catálogo por talle"</span>
+<span class="t-dim">commit-gate → paw_checks.py  ·  i18n · flyway · jstl</span>
+<span class="t-err">✗  i18n · key coja: catalog.filter.size</span>
+<span class="t-dim"><span class="historia-term-indent">definida en messages.properties · FALTA en messages_en y messages_fr</span></span>
+<span class="t-err"><span class="historia-term-indent">una key coja = JasperException en runtime — mvn test pasa igual</span></span>
+<span class="t-dim">commit bloqueado  ·  bypass: PAW_SKIP_SMOKE=1</span>
+
+<span class="t-dim"># agregás la key en los bundles _en y _fr y reintentás</span>
+<span class="t-cmd">git commit -m "feat: filtro de catálogo por talle"</span>
+<span class="t-dim">commit-gate → paw_checks.py</span>
+<span class="t-ok">✓  i18n    los 4 bundles en paridad</span>
+<span class="t-ok">✓  flyway  sin versiones duplicadas</span>
+<span class="t-ok">✓  jstl    tags balanceados</span>
+<span class="t-hl">[main 7f2a1c4] feat: filtro de catálogo por talle</span></pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="problema" class="section alt">
+  <div class="container">
+    <p class="kicker">01 · El problema</p>
+    <h2 class="section-title reveal">Cursar con un agente tiene su propia lista de <em>trampas</em>.</h2>
+    <p class="section-lede reveal d1">
+      El kit no salió de un blog post. Salió de una meta-auditoría de <strong>~113 sesiones</strong>
+      de Claude Code sobre un TP real de la materia — <strong>Grupo 10, 2026-1C, «Rent The
+      Slopes»</strong> — que catalogó los <strong>12 puntos de fricción</strong> más caros de
+      cursar PAW con un agente. Estos son los que más nota cuestan.
+    </p>
+
+    <div class="historia-fric-grid">
+
+      <article class="card reveal d1">
+        <span class="chip historia-tag">i18n</span>
+        <h3>Key i18n coja</h3>
+        <p>Agregás un texto en un bundle y te olvidás de los otros tres.</p>
+        <span class="historia-cost">→ JasperException en runtime. El build ni se entera.</span>
+      </article>
+
+      <article class="card reveal d2">
+        <span class="chip historia-tag">Flyway</span>
+        <h3>Migración duplicada post-merge</h3>
+        <p>Dos ramas crean la misma versión de migración. Mergeás y ni lo notás.</p>
+        <span class="historia-cost">→ la app no bootea.</span>
+      </article>
+
+      <article class="card reveal d3">
+        <span class="chip historia-tag">UI</span>
+        <h3>Iteración visual a ciegas</h3>
+        <p>Retocás una JSP sin ver el render; corregís de memoria, ida y vuelta.</p>
+        <span class="historia-cost">→ rediseños que no ves hasta que rompen en la demo.</span>
+      </article>
+
+      <article class="card reveal d1">
+        <span class="chip historia-tag">JSTL</span>
+        <h3>Tags JSTL desbalanceados</h3>
+        <p>Un &lt;c:if&gt; abierto sin cerrar, perdido en una vista.</p>
+        <span class="historia-cost">→ 500 en runtime que mvn test no atrapa.</span>
+      </article>
+
+      <article class="card reveal d2">
+        <span class="chip historia-tag">Auditorías</span>
+        <h3>Falsos positivos que vuelven</h3>
+        <p>El agente re-marca algo que ya discutiste y cerraste hace tres sesiones.</p>
+        <span class="historia-cost">→ ruido, y decisiones ya saldadas litigadas de nuevo.</span>
+      </article>
+
+      <article class="card reveal d3">
+        <span class="chip historia-tag">Tests</span>
+        <h3>Tests verdes ≠ la app anda</h3>
+        <p>El build pasa, la suite está en verde, y el flujo real se cae igual.</p>
+        <span class="historia-cost">→ nota perdida por algo que un smoke de 2 minutos agarraba.</span>
+      </article>
+
+    </div>
+
+    <div class="callout reveal">
+      <p>
+        Doce fricciones, catalogadas una por una — no una wishlist, un inventario de cosas que
+        ya costaron nota. <strong>Cada pieza del kit existe para matar una:</strong> los hooks las
+        frenan antes del commit, las skills las evitan mientras codeás, los checks las cazan en
+        segundos. Así se arma el sistema que viene abajo.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style data-section="sistema">
+  /* ---- Cuatro piezas: íconos de card StudyVaults ---- */
+  .sistema-piecehead {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    margin-bottom: .95rem;
+    flex-wrap: wrap;
+  }
+  .sistema-ic {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--r-ctrl);
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent-text);
+  }
+  .sistema-ic.ice {
+    background: var(--primary-soft);
+    border-color: var(--primary-line);
+    color: var(--link);
+  }
+
+  /* ---- Diagrama de dos caminos: paneles técnicos ---- */
+  .sistema-flow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.1rem;
+    margin-top: 1.6rem;
+  }
+  .sistema-lane {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+    padding: 1.3rem 1.2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    box-shadow: var(--shadow-sm);
+  }
+  .sistema-lane-h {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    font-weight: 500;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 1.1rem;
+    display: flex;
+    align-items: baseline;
+    gap: .45rem;
+  }
+  .sistema-lane-h b {
+    font-weight: 600;
+    letter-spacing: .06em;
+    color: var(--accent-text);
+  }
+
+  /* ---- Nodos ---- */
+  .sistema-node {
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-ctrl);
+    padding: .72rem .85rem;
+    background: var(--surface-3);
+    text-align: center;
+  }
+  .sistema-node .sistema-nt {
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--ink-strong);
+    display: block;
+    line-height: 1.35;
+  }
+  .sistema-node .sistema-nd {
+    font-size: .8rem;
+    color: var(--text-secondary);
+    display: block;
+    margin-top: .25rem;
+    line-height: 1.4;
+  }
+  .sistema-node.you {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+  }
+  .sistema-node.you .sistema-nt { color: var(--accent-text); }
+  .sistema-node.src {
+    border-color: var(--primary-line);
+    background: var(--primary-soft);
+  }
+  .sistema-node.src .sistema-nt { color: var(--link); }
+
+  /* chip del evento dentro de un nodo (identificador en código → sin uppercase) */
+  .sistema-nchip {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: .62rem;
+    font-weight: 500;
+    letter-spacing: .03em;
+    color: var(--link);
+    border: 1px solid var(--primary-line);
+    background: var(--primary-soft);
+    border-radius: var(--r-pill);
+    padding: .12rem .5rem;
+    margin-bottom: .45rem;
+  }
+
+  /* ---- Conector recto (reemplaza la flecha a mano): 1px + punta CSS ---- */
+  .sistema-arrow {
+    align-self: center;
+    position: relative;
+    width: 1px;
+    height: 24px;
+    margin: .25rem 0;
+    background: var(--hairline-strong);
+  }
+  .sistema-arrow::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 5px;
+    height: 5px;
+    border-right: 1px solid var(--hairline-strong);
+    border-bottom: 1px solid var(--hairline-strong);
+    transform: translate(-50%, -1px) rotate(45deg);
+  }
+
+  /* ---- Rama pasa / bloquea ---- */
+  .sistema-branch {
+    display: flex;
+    gap: .7rem;
+    flex-wrap: wrap;
+  }
+  .sistema-branch > .sistema-node { flex: 1 1 130px; }
+  .sistema-node.ok {
+    border-color: color-mix(in srgb, var(--status-go) 45%, transparent);
+    background: color-mix(in srgb, var(--status-go) 12%, transparent);
+  }
+  .sistema-node.ok .sistema-nt { color: var(--status-go); }
+  .sistema-node.bad {
+    border-color: color-mix(in srgb, var(--status-caution) 45%, transparent);
+    background: color-mix(in srgb, var(--status-caution) 12%, transparent);
+  }
+  .sistema-node.bad .sistema-nt { color: var(--status-caution); }
+
+  /* ---- Cards de hooks: chip del evento ---- */
+  .sistema-hookrow {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    margin-bottom: .7rem;
+    flex-wrap: wrap;
+  }
+  .sistema-ev {
+    font-family: var(--font-mono);
+    font-size: .66rem;
+    font-weight: 500;
+    letter-spacing: .03em;
+    color: var(--link);
+    border: 1px solid var(--primary-line);
+    background: var(--primary-soft);
+    border-radius: var(--r-pill);
+    padding: .16rem .6rem;
+    white-space: nowrap;
+  }
+
+  /* ---- Demo del commit-gate: dos terminales (code blocks del shell, intactas) ---- */
+  .sistema-demo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 1.1rem;
+    margin-top: 1.2rem;
+    align-items: start;
+  }
+  .sistema-termwrap { position: relative; }
+  .sistema-termwrap pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  /* encabezado de cada terminal: badge de veredicto + acción (micro-label mono) */
+  .sistema-vhead {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin: 0 0 .7rem;
+    flex-wrap: wrap;
+  }
+  .sistema-vcap {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    font-weight: 500;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  /* badge "Bloqueado" en variante caution (el shell trae .stamp coral y .stamp.ok verde) */
+  .stamp.deny {
+    background: color-mix(in srgb, var(--status-caution) 15%, transparent);
+    border-color: color-mix(in srgb, var(--status-caution) 45%, transparent);
+    color: var(--status-caution);
+  }
+
+  .sistema-checks {
+    margin-top: 1.4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.1rem;
+    align-items: start;
+  }
+
+  .sistema-mt-lg { margin-top: 2.4rem; }
+  .sistema-mt-md { margin-top: 1.8rem; }
+  .sistema-note { margin-top: .9rem; font-size: .9rem; }
+</style>
+
+<section id="vistazo" class="section">
+  <div class="container">
+    <p class="kicker reveal">02 · El kit</p>
+    <h2 class="section-title reveal">Cuatro piezas, dos caminos</h2>
+    <p class="section-lede reveal">
+      Todo el kit vive en el <code>.claude/</code> de tu repo y son cuatro tipos de pieza.
+      Cada una tiene un rol y se enganchan en dos momentos: cuando escribís un prompt y cuando
+      commiteás. Nada de magia — piezas chicas que se pasan la pelota.
+    </p>
+
+    <div class="card-grid reveal d1">
+      <div class="card">
+        <div class="sistema-piecehead">
+          <span class="sistema-ic" aria-hidden="true">HK</span>
+          <span class="chip">python · fuera del modelo</span>
+        </div>
+        <h3>Hooks</h3>
+        <p>
+          Automatizaciones en Python que corren <strong>solas</strong>, sin que Claude decida nada.
+          Se disparan por eventos: escribís un prompt, Claude edita un bundle, alguien commitea.
+          Son cuatro.
+        </p>
+      </div>
+      <div class="card">
+        <div class="sistema-piecehead">
+          <span class="sistema-ic ice" aria-hidden="true">SK</span>
+          <span class="chip">18 comandos</span>
+        </div>
+        <h3>Skills</h3>
+        <p>
+          Los comandos <span class="cmd">/algo</span> con las reglas de la cátedra encodeadas
+          adentro. Los invocás vos — <span class="cmd">/plan</span>, <span class="cmd">/gp</span>,
+          <span class="cmd">/deliver</span>… — o te los sugiere un hook.
+        </p>
+      </div>
+      <div class="card">
+        <div class="sistema-piecehead">
+          <span class="sistema-ic" aria-hidden="true">CK</span>
+          <span class="chip">determinístico</span>
+        </div>
+        <h3>Checks</h3>
+        <p>
+          <code>paw_checks.py</code>: un script que corre en segundos y no opina, mide. Lo
+          comparten hooks y skills, y también lo corrés a mano cuando querés.
+        </p>
+      </div>
+      <div class="card">
+        <div class="sistema-piecehead">
+          <span class="sistema-ic ice" aria-hidden="true">DC</span>
+          <span class="chip">fuente de verdad</span>
+        </div>
+        <h3>Docs + etapas</h3>
+        <p>
+          Las convenciones de la cátedra más las reglas por entrega (JDBC → JPA → SPA+REST).
+          Es lo que las skills <strong>leen</strong> para saber qué exigir en tu etapa.
+        </p>
+      </div>
+    </div>
+
+    <h3 class="reveal sistema-mt-lg">Los dos caminos</h3>
+    <div class="sistema-flow reveal d1">
+
+      <div class="sistema-lane a">
+        <p class="sistema-lane-h"><b>Camino A</b> · escribís un prompt</p>
+
+        <div class="sistema-node you">
+          <span class="sistema-nt">«se ve feo esta pantalla»</span>
+          <span class="sistema-nd">tu mensaje, tal cual lo tipeás</span>
+        </div>
+        <span class="sistema-arrow" aria-hidden="true"></span>
+
+        <div class="sistema-node hook">
+          <span class="sistema-nchip">UserPromptSubmit</span>
+          <span class="sistema-nt">skill-autolaunch</span>
+          <span class="sistema-nd">sugiere la skill correcta (con guards anti falso disparo)</span>
+        </div>
+        <span class="sistema-arrow" aria-hidden="true"></span>
+
+        <div class="sistema-node">
+          <span class="sistema-nt">/enhancer arranca</span>
+          <span class="sistema-nd">la skill toma la posta</span>
+        </div>
+        <span class="sistema-arrow" aria-hidden="true"></span>
+
+        <div class="sistema-node src">
+          <span class="sistema-nt">lee docs/ + la ETAPA</span>
+          <span class="sistema-nd">convenciones de la cátedra + la etapa declarada en tu CLAUDE.md</span>
+        </div>
+      </div>
+
+      <div class="sistema-lane b">
+        <p class="sistema-lane-h"><b>Camino B</b> · git commit</p>
+
+        <div class="sistema-node you">
+          <span class="sistema-nt">git commit</span>
+          <span class="sistema-nd">vos (o Claude) intentás commitear</span>
+        </div>
+        <span class="sistema-arrow" aria-hidden="true"></span>
+
+        <div class="sistema-node hook">
+          <span class="sistema-nchip">PreToolUse</span>
+          <span class="sistema-nt">commit-gate</span>
+          <span class="sistema-nd">intercepta antes de que el commit ocurra</span>
+        </div>
+        <span class="sistema-arrow" aria-hidden="true"></span>
+
+        <div class="sistema-node">
+          <span class="sistema-nt">paw_checks.py all</span>
+          <span class="sistema-nd">i18n · Flyway · JSTL, en segundos</span>
+        </div>
+        <span class="sistema-arrow" aria-hidden="true"></span>
+
+        <div class="sistema-branch">
+          <div class="sistema-node ok">
+            <span class="sistema-nt">pasa ✔</span>
+            <span class="sistema-nd">el commit entra</span>
+          </div>
+          <div class="sistema-node bad">
+            <span class="sistema-nt">bloquea ✗</span>
+            <span class="sistema-nd">arreglás y reintentás</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="hooks" class="section alt">
+  <div class="container">
+    <p class="kicker reveal">03 · Hooks</p>
+    <h2 class="section-title reveal">Los que trabajan mientras <em>dormís</em></h2>
+    <p class="section-lede reveal">
+      Corren <strong>solos</strong>, fuera del modelo: son Python de librería estándar pura,
+      determinísticos, y fallan en silencio — jamás te bloquean un prompt por un bug propio.
+      Se cargan al arrancar la sesión, así que instalás y a la próxima ya están escuchando.
+    </p>
+
+    <div class="card-grid reveal d1">
+      <div class="card">
+        <div class="sistema-hookrow">
+          <span class="sistema-ev">UserPromptSubmit</span>
+        </div>
+        <h3>skill-autolaunch</h3>
+        <p>
+          Lee tu prompt y sugiere la skill correcta —
+          «antes de entregar» → <span class="cmd">/pre-delivery</span>, «se ve feo» →
+          <span class="cmd">/enhancer</span>, «auditá el proyecto» →
+          <span class="cmd">/general-audit</span>— con guards para no dispararse en falso
+          (si hablás <em>de</em> las skills o las sesiones, se calla).
+        </p>
+      </div>
+      <div class="card">
+        <div class="sistema-hookrow">
+          <span class="sistema-ev">PostToolUse</span>
+        </div>
+        <h3>i18n-parity-posttool</h3>
+        <p>
+          Si Claude edita un <code>messages*.properties</code> y deja keys cojas, se lo marca
+          <strong>en el mismo turno</strong> para que las complete ahí mismo — antes de que la
+          página explote en runtime.
+        </p>
+      </div>
+      <div class="card">
+        <div class="sistema-hookrow">
+          <span class="sistema-ev">PreToolUse</span>
+        </div>
+        <h3>commit-gate</h3>
+        <p>
+          Todo <code>git commit</code> corre los checks primero. Si fallan, bloquea el commit
+          con el detalle del problema. La vía de escape es explícita:
+          <span class="cmd">PAW_SKIP_SMOKE=1</span>.
+        </p>
+      </div>
+      <div class="card">
+        <div class="sistema-hookrow">
+          <span class="sistema-ev">PreToolUse</span>
+        </div>
+        <h3>db-server-guard</h3>
+        <p>
+          Impide que Claude corra <code>psql</code>/<code>pg_*</code>/<code>jetty:run</code> por
+          su cuenta: lo obliga a darte el comando listo para copiar (con preview antes de lo
+          destructivo). Bypass: <span class="cmd">PAW_ALLOW_DB=1</span>.
+        </p>
+      </div>
+    </div>
+
+    <h3 class="reveal sistema-mt-lg">El momento estrella: un commit que no pasa</h3>
+    <p class="prose reveal">
+      Terminaste una feature, tipeás el <code>git commit</code> de siempre… y el gate te frena
+      porque tras el último merge quedaron <strong>dos migraciones V54</strong>. La app no
+      bootearía y el corrector lo vería. Acá está la salida real del script, tal cual te la
+      devuelve el hook:
+    </p>
+
+    <div class="sistema-demo reveal d1">
+      <div>
+        <div class="sistema-vhead">
+          <span class="stamp deny">Bloqueado</span>
+        </div>
+        <div class="sistema-termwrap">
+          <div class="term">
+            <div class="term-bar">
+              <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+              <span class="term-title">commit-gate · deny</span>
+            </div>
+            <div class="term-body"><pre><span class="t-cmd">git commit -m "feat: reservas de pistas"</span>
+<span class="t-err">Smoke checks del proyecto fallaron — no commiteo esto:</span>
+<span class="t-ok">i18n: OK</span>
+<span class="t-ok">jsp: OK</span>
+
+<span class="t-err">PROBLEMAS ENCONTRADOS:</span>
+<span class="t-err">  - flyway: versión V54 duplicada: V54__add_rating_to_slopes.sql, V54__create_bookings.sql — la app no bootea</span>
+<span class="t-dim">Arreglá los problemas y reintentá el commit. Si el usuario pide explícitamente commitear igual, reintentá anteponiendo PAW_SKIP_SMOKE=1 al comando de git.</span></pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sistema-vhead">
+          <span class="stamp ok">Pasa</span>
+          <span class="sistema-vcap">renombrás V54 → V55 y reintentás</span>
+        </div>
+        <div class="sistema-termwrap">
+          <div class="term">
+            <div class="term-bar">
+              <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+              <span class="term-title">commit-gate · allow</span>
+            </div>
+            <div class="term-body"><pre><span class="t-dim"># después de renombrar la migración duplicada</span>
+<span class="t-cmd">git commit -m "feat: reservas de pistas"</span>
+<span class="t-dim"># el gate corre paw_checks all en silencio → todo OK, no se mete</span>
+<span class="t-ok">[main 7f3a9c1] feat: reservas de pistas</span>
+ 6 files changed, 214 insertions(+)</pre></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sistema-checks reveal">
+      <div class="card">
+        <span class="chip">corre en segundos</span>
+        <h3>paw_checks.py, en tres líneas</h3>
+        <p>
+          Un solo script determinístico que chequea las tres cosas que rompen la entrega sin que
+          <code>mvn test</code> se entere:
+        </p>
+        <p>
+          <strong>Paridad de keys i18n</strong> entre los 4 bundles — una key coja =
+          <code>JasperException</code> en runtime.
+          <strong>Versiones Flyway duplicadas</strong> — dos V54 tras un merge y la app no bootea.
+          <strong>Balance de tags JSTL</strong> — un <code>&lt;c:forEach&gt;</code> sin cerrar es
+          un 500 que los tests HSQLDB no atrapan.
+        </p>
+      </div>
+      <div class="sistema-termwrap">
+        <div class="term">
+          <div class="term-bar">
+            <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+            <span class="term-title">a mano, cuando querés</span>
+          </div>
+          <div class="term-body"><pre><span class="t-cmd">python3 .claude/scripts/paw_checks.py all</span>
+<span class="t-ok">i18n: OK</span>
+<span class="t-ok">flyway: OK</span>
+<span class="t-ok">jsp: OK</span></pre></div>
+        </div>
+        <p class="prose sistema-note">
+          Los mismos checks los corren el <code>commit-gate</code> y el hook de i18n — el script
+          es la fuente única, hooks y skills solo lo llaman.
+        </p>
+      </div>
+    </div>
+
+    <div class="callout reveal sistema-mt-md">
+      <p>
+        <strong>Los dos escapes, explícitos y a propósito.</strong> Cuando de verdad necesitás
+        saltarte un guard, anteponés la env var al comando — nada de flags escondidos:
+      </p>
+      <p>
+        <span class="cmd">PAW_SKIP_SMOKE=1</span> commitea aunque los checks estén rotos ·
+        <span class="cmd">PAW_ALLOW_DB=1</span> autoriza a Claude a tocar la BD dev por esta vez.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style data-section="skills">
+  /* ============ SKILLS · Technical Split ============ */
+
+  /* ---- encabezados de categoría ---- */
+  .skills-cat { margin-top: 3.25rem; }
+  .skills-cat:first-of-type { margin-top: 2.5rem; }
+  .skills-cat-head {
+    display: flex;
+    align-items: baseline;
+    gap: .85rem;
+    margin-bottom: 1.4rem;
+  }
+  .skills-cat-num {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--accent-text);
+    flex: 0 0 auto;
+  }
+  .skills-cat-num::after { content: " ·"; color: var(--accent-text); }
+  .skills-cat-head--routes .skills-cat-num::after { content: none; }
+  .skills-cat-name {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.3rem;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink-strong);
+    margin: 0;
+    flex: 0 0 auto;
+  }
+  .skills-cat-rule {
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--hairline);
+    transform: translateY(-3px);
+  }
+  .skills-cat-count {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    flex: 0 0 auto;
+  }
+
+  /* ---- grilla de fichas ---- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+    gap: 16px;
+  }
+
+  /* ficha = card StudyVaults (surface-2 + borde + hover lift + barra gradiente) */
+  .skills-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .55rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+    padding: 1.1rem 1.15rem 1.2rem;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: transform var(--dur) var(--ease),
+                box-shadow var(--dur) var(--ease),
+                border-color var(--dur) var(--ease);
+  }
+  .skills-card::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; height: 2px; width: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--primary));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur) var(--ease);
+  }
+  .skills-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--hairline-strong);
+  }
+  .skills-card:hover::after { transform: scaleX(1); }
+
+  /* el comando grande arriba: ya sale celeste del shell (.cmd = link) */
+  .skills-card .cmd {
+    font-size: .92rem;
+    transition: background var(--dur-fast) var(--ease),
+                border-color var(--dur-fast) var(--ease);
+  }
+  /* hover: el comando "se enciende" — sobrio, solo intensifica primary-soft */
+  .skills-card:hover .cmd {
+    background: color-mix(in srgb, var(--primary) 24%, var(--surface-2));
+    border-color: var(--primary);
+  }
+  [data-theme="light"] .skills-card:hover .cmd {
+    background: color-mix(in srgb, var(--primary) 32%, var(--surface-2));
+  }
+
+  /* nombre de skill: micro-label mono */
+  .skills-name {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .skills-desc {
+    margin: .15rem 0 0;
+    font-size: .875rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+  .skills-desc code {
+    font-family: var(--font-mono);
+    font-size: .82em;
+    color: var(--ink-strong);
+  }
+  /* flecha de flujo dentro de una descripción: celeste (info/enlace) */
+  .skills-desc .skills-hl { color: var(--link); }
+
+  /* ---- recorridos ---- */
+  .skills-routes { margin-top: 4rem; }
+  .skills-routes-intro {
+    max-width: 42rem;
+    margin: .4rem 0 1.7rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .skills-routes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 16px;
+  }
+  .skills-route {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+    padding: 1.15rem 1.25rem 1.25rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur) var(--ease),
+                box-shadow var(--dur) var(--ease),
+                border-color var(--dur) var(--ease);
+  }
+  .skills-route:hover {
+    transform: translateY(-4px);
+    border-color: var(--hairline-strong);
+    box-shadow: var(--shadow-md);
+  }
+  .skills-route-label {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin: 0 0 1rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.08rem;
+    letter-spacing: -0.01em;
+    color: var(--ink-strong);
+  }
+  /* marcadores de pista: símbolos planos por token, sin glow */
+  .skills-mk { flex: 0 0 auto; display: block; }
+  .skills-mk-easy circle { fill: var(--status-go); }
+  .skills-mk-mid  rect   { fill: var(--link); }
+  .skills-mk-hard rect   { fill: var(--accent-text); }
+  .skills-mk-peak path   { fill: var(--ink-strong); }
+
+  .skills-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+  }
+  .skills-flow .cmd { font-size: .84rem; }
+  /* flecha fina recta (reemplaza a la "dibujada a mano") */
+  .skills-arrow {
+    flex: 0 0 auto;
+    display: block;
+    color: var(--text-secondary);
+  }
+  .skills-step {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding: .3rem .62rem;
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-pill);
+    background: var(--surface-3);
+    white-space: nowrap;
+  }
+  /* nota final: itálica Newsreader --text-secondary */
+  .skills-note {
+    margin: .9rem 0 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: .95rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 460px) {
+    .skills-cat-head { flex-wrap: wrap; row-gap: .3rem; }
+    .skills-cat-rule { order: 3; flex-basis: 100%; }
+  }
+</style>
+
+<section id="skills" class="section">
+  <div class="container">
+    <p class="kicker reveal">04 · Skills</p>
+    <h2 class="section-title reveal">Dieciocho atajos, <em>cero</em> para memorizar</h2>
+    <p class="section-lede reveal">
+      18 comandos <code>/algo</code>, uno para cada momento de la cursada; el hook
+      <code>skill-autolaunch</code> te sugiere el correcto según lo que escribís, así no
+      hace falta memorizarlos.
+    </p>
+
+    <!-- CATEGORÍA 1 -->
+    <div class="skills-cat reveal">
+      <div class="skills-cat-head">
+        <span class="skills-cat-num">01</span>
+        <h3 class="skills-cat-name">Planificar y codear</h3>
+        <span class="skills-cat-rule" aria-hidden="true"></span>
+        <span class="skills-cat-count">4 skills</span>
+      </div>
+      <div class="skills-grid">
+        <article class="skills-card">
+          <span class="cmd">/feature-engineering</span>
+          <span class="skills-name">feature-engineering</span>
+          <p class="skills-desc">Entrevista de descubrimiento: idea vaga <span class="skills-hl">&rarr;</span> spec implementable.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/plan</span>
+          <span class="skills-name">planning</span>
+          <p class="skills-desc">Plan fase-a-fase de una feature: models <span class="skills-hl">&rarr;</span> persistence <span class="skills-hl">&rarr;</span> services <span class="skills-hl">&rarr;</span> validators <span class="skills-hl">&rarr;</span> controllers <span class="skills-hl">&rarr;</span> views <span class="skills-hl">&rarr;</span> tests.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/impl</span>
+          <span class="skills-name">implementation</span>
+          <p class="skills-desc">Ejecuta un plan fase por fase respetando las convenciones del curso.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/migrate</span>
+          <span class="skills-name">jdbc-to-jpa</span>
+          <p class="skills-desc">Migra la persistencia JDBC <span class="skills-hl">&rarr;</span> JPA un agregado por vez: entidades, JpaDao, 1+1, tests con <code>em.flush()</code>, swap de bean.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- CATEGORÍA 2 -->
+    <div class="skills-cat reveal">
+      <div class="skills-cat-head">
+        <span class="skills-cat-num">02</span>
+        <h3 class="skills-cat-name">Calidad y auditorías</h3>
+        <span class="skills-cat-rule" aria-hidden="true"></span>
+        <span class="skills-cat-count">7 skills</span>
+      </div>
+      <div class="skills-grid">
+        <article class="skills-card">
+          <span class="cmd">/gp</span>
+          <span class="skills-name">good-practice</span>
+          <p class="skills-desc">Chequeo de lo modificado contra las reglas del corrector (XSS, ownership, <code>Mockito.verify</code>, N+1, trampas Hibernate). Después de codear, antes de commitear.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/smoke</span>
+          <span class="skills-name">smoke</span>
+          <p class="skills-desc">Sanidad en &lt;2 min: checks + test-compile. Solo reporta, no arregla.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/deliver</span>
+          <span class="skills-name">pre-delivery</span>
+          <p class="skills-desc">Checklist completo de pre-entrega + build + tests; integra los chequeos de XSS y ownership.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/corrector</span>
+          <span class="skills-name">corrector-eyes</span>
+          <p class="skills-desc">Simula al corrector con tolerancia cero y estima puntos en riesgo. Stress-test final.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/audit</span>
+          <span class="skills-name">forensic-audit</span>
+          <p class="skills-desc">Auditoría forense profunda con agentes paralelos por feature.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/general</span>
+          <span class="skills-name">general-audit</span>
+          <p class="skills-desc">Auditoría en dos pasadas (vertical + horizontal) con dictamen.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/i18n</span>
+          <span class="skills-name">i18n-sync</span>
+          <p class="skills-desc">Diff fino de bundles: keys sin definir, huérfanas, textos hardcodeados.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- CATEGORÍA 3 -->
+    <div class="skills-cat reveal">
+      <div class="skills-cat-head">
+        <span class="skills-cat-num">03</span>
+        <h3 class="skills-cat-name">Frontend / UI</h3>
+        <span class="skills-cat-rule" aria-hidden="true"></span>
+        <span class="skills-cat-count">3 skills</span>
+      </div>
+      <div class="skills-grid">
+        <article class="skills-card">
+          <span class="cmd">/design</span>
+          <span class="skills-name">design</span>
+          <p class="skills-desc">UI nueva o rediseño dentro del design system; verifica el renderizado antes de dar Done.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/enhance</span>
+          <span class="skills-name">enhancer</span>
+          <p class="skills-desc">Retoque estético liviano de JSP/CSS sin tocar funcionalidad.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/frontend-analyzer</span>
+          <span class="skills-name">frontend-analyzer</span>
+          <p class="skills-desc">Análisis forense del diseño de una página local <span class="skills-hl">&rarr;</span> spec de tokens/componentes.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- CATEGORÍA 4 -->
+    <div class="skills-cat reveal">
+      <div class="skills-cat-head">
+        <span class="skills-cat-num">04</span>
+        <h3 class="skills-cat-name">Sesión, bugs y meta</h3>
+        <span class="skills-cat-rule" aria-hidden="true"></span>
+        <span class="skills-cat-count">4 skills</span>
+      </div>
+      <div class="skills-grid">
+        <article class="skills-card">
+          <span class="cmd">/bug</span>
+          <span class="skills-name">bug</span>
+          <p class="skills-desc">Ledger de bugs en <code>0_Plans/BUGS.md</code>: síntoma verbatim + intentos fallidos; un bug se explica una sola vez.</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/handoff</span>
+          <span class="skills-name">handoff</span>
+          <p class="skills-desc">Cierre de sesión reanudable: estado + prompt de reanudación auto-contenido (session limits, cambio de modelo).</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/wiki</span>
+          <span class="skills-name">wiki-sync</span>
+          <p class="skills-desc">Sincroniza un wiki de Obsidian con la codebase (opcional — ajustá la ruta del wiki en su SKILL.md).</p>
+        </article>
+        <article class="skills-card">
+          <span class="cmd">/port</span>
+          <span class="skills-name">skillset-port</span>
+          <p class="skills-desc">Adapta todo este set a OTRO proyecto/stack (detecta, entrevista, reescribe).</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- RECORRIDOS -->
+    <div class="skills-routes reveal">
+      <div class="skills-cat-head skills-cat-head--routes">
+        <span class="skills-cat-num">&rarr;</span>
+        <h3 class="skills-cat-name">Recorridos del día a día</h3>
+        <span class="skills-cat-rule" aria-hidden="true"></span>
+      </div>
+      <p class="skills-routes-intro">
+        No los uses sueltos: encadenados es donde rinden. Cuatro bajadas que vas a repetir
+        toda la cursada — como pistas señalizadas, cada una con su nivel.
+      </p>
+
+      <div class="skills-routes-grid">
+        <div class="skills-route">
+          <h4 class="skills-route-label">
+            <svg class="skills-mk skills-mk-mid" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="1.5" y="1.5" width="9" height="9"/></svg>
+            Feature nueva
+          </h4>
+          <div class="skills-flow">
+            <span class="cmd">/plan</span>
+            <svg class="skills-arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h13"/><path d="M11.5 2.5 15.5 6 11.5 9.5"/></svg>
+            <span class="cmd">/impl</span>
+            <svg class="skills-arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h13"/><path d="M11.5 2.5 15.5 6 11.5 9.5"/></svg>
+            <span class="cmd">/gp</span>
+            <svg class="skills-arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h13"/><path d="M11.5 2.5 15.5 6 11.5 9.5"/></svg>
+            <span class="skills-step">commit</span>
+          </div>
+          <p class="skills-note">El commit-gate corre solo: si los checks fallan, no commitea.</p>
+        </div>
+
+        <div class="skills-route">
+          <h4 class="skills-route-label">
+            <svg class="skills-mk skills-mk-hard" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2.2" y="2.2" width="7.6" height="7.6" transform="rotate(45 6 6)"/></svg>
+            Antes de entregar
+          </h4>
+          <div class="skills-flow">
+            <span class="cmd">/smoke</span>
+            <svg class="skills-arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h13"/><path d="M11.5 2.5 15.5 6 11.5 9.5"/></svg>
+            <span class="cmd">/deliver</span>
+            <svg class="skills-arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h13"/><path d="M11.5 2.5 15.5 6 11.5 9.5"/></svg>
+            <span class="cmd">/corrector</span>
+          </div>
+          <p class="skills-note">La bajada difícil: sanidad, checklist y el corrector paranoico al final.</p>
+        </div>
+
+        <div class="skills-route">
+          <h4 class="skills-route-label">
+            <svg class="skills-mk skills-mk-easy" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5"/></svg>
+            Ajuste visual
+          </h4>
+          <div class="skills-flow">
+            <span class="cmd">/enhance</span>
+            <svg class="skills-arrow" width="20" height="12" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6h13"/><path d="M11.5 2.5 15.5 6 11.5 9.5"/></svg>
+            <span class="cmd">/i18n</span>
+          </div>
+          <p class="skills-note">Retocás la estética y confirmás que no se coló texto hardcodeado.</p>
+        </div>
+
+        <div class="skills-route">
+          <h4 class="skills-route-label">
+            <svg class="skills-mk skills-mk-peak" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1 L11 10.5 L1 10.5 Z"/></svg>
+            Te quedaste sin tokens
+          </h4>
+          <div class="skills-flow">
+            <span class="cmd">/handoff</span>
+          </div>
+          <p class="skills-note">Un solo comando: prompt de reanudación auto-contenido para la próxima sesión.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style data-section="etapas">
+  /* ---- leyenda: micro-labels mono + símbolos de dificultad ---- */
+  .etapas-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .55rem 1.5rem;
+    margin: 1.5rem 0 2.4rem;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .etapas-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  /* símbolos de dificultad inline (leyenda) */
+  .etapas-sym {
+    width: 13px;
+    height: 13px;
+    flex: 0 0 auto;
+    display: inline-block;
+  }
+  .etapas-sym.etapas-green { border-radius: 50%; background: var(--status-go); }
+  .etapas-sym.etapas-blue  { border-radius: 3px; background: var(--link); }
+  .etapas-sym.etapas-black {
+    transform: rotate(45deg);
+    background: var(--ink-strong);
+    border: 1px solid var(--hairline-strong);
+    border-radius: 2px;
+  }
+
+  /* ---- el mapa de pistas: timeline vertical ---- */
+  .etapas-map {
+    position: relative;
+    margin: 0 0 2.8rem;
+  }
+  /* la pista: hairline fino dashed que desciende el mapa */
+  .etapas-map::before {
+    content: "";
+    position: absolute;
+    left: 24px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--hairline-strong) 0 4px,
+      transparent 4px 10px
+    );
+  }
+
+  .etapas-run {
+    position: relative;
+    padding-left: 60px;
+    margin-bottom: .4rem;
+    --etapas-run: var(--accent);
+    --etapas-run-soft: var(--accent-soft);
+  }
+  .etapas-run.etapas-green { --etapas-run: var(--status-go);  --etapas-run-soft: color-mix(in srgb, var(--status-go) 14%, transparent); }
+  .etapas-run.etapas-blue  { --etapas-run: var(--link);       --etapas-run-soft: color-mix(in srgb, var(--link) 14%, transparent); }
+  .etapas-run.etapas-black { --etapas-run: var(--ink-strong); --etapas-run-soft: color-mix(in srgb, var(--ink-strong) 14%, transparent); }
+
+  /* marcador de dificultad sobre la pista (plano) */
+  .etapas-mark {
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    width: 26px;
+    height: 26px;
+    box-shadow: 0 0 0 4px var(--bg-dip);
+  }
+  .etapas-mark.etapas-green {
+    border-radius: 50%;
+    background: var(--status-go);
+  }
+  .etapas-mark.etapas-blue {
+    border-radius: 4px;
+    background: var(--link);
+  }
+  .etapas-mark.etapas-black {
+    transform: rotate(45deg);
+    background: var(--ink-strong);
+    border: 1px solid var(--hairline-strong);
+    border-radius: 3px;
+  }
+
+  /* panel de etapa: patrón card StudyVaults + borde-top color de la pista */
+  .etapas-panel {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--etapas-run);
+    border-radius: var(--r-card);
+    padding: 1.15rem 1.3rem 1.25rem;
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) 1fr;
+    gap: 1rem 1.7rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur) var(--ease),
+                box-shadow var(--dur) var(--ease),
+                border-color var(--dur) var(--ease);
+  }
+  .etapas-panel:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--hairline-strong);
+    border-top-color: var(--etapas-run);
+  }
+
+  /* pill de dificultad: micro-label mono, color del marcador sobre fondo suave */
+  .etapas-diff {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--etapas-run);
+    background: var(--etapas-run-soft);
+    border-radius: var(--r-pill);
+    padding: .22rem .6rem;
+    margin-bottom: .6rem;
+  }
+  .etapas-panel h3 {
+    margin: 0 0 .7rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.28rem;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink-strong);
+  }
+  .etapas-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+    margin: 0;
+  }
+
+  .etapas-rules {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: .55rem;
+  }
+  .etapas-rules li {
+    position: relative;
+    padding-left: 1.15rem;
+    color: var(--text-secondary);
+    font-size: .95rem;
+    line-height: 1.5;
+  }
+  .etapas-rules li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .5em;
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--etapas-run);
+  }
+  .etapas-rules li strong { color: var(--ink-strong); font-weight: 600; }
+  .etapas-rules li code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    color: var(--ink-strong);
+    background: var(--surface-3);
+    border: 1px solid var(--hairline);
+    padding: .05em .32em;
+    border-radius: 6px;
+  }
+  .etapas-rules li.etapas-caveat {
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: .88rem;
+  }
+  .etapas-rules li.etapas-caveat::before {
+    background: none;
+    content: "!";
+    display: grid;
+    place-items: center;
+    top: .1em;
+    width: .95rem;
+    height: .95rem;
+    border-radius: 50%;
+    border: 1px solid var(--status-caution);
+    color: var(--status-caution);
+    font-family: var(--font-mono);
+    font-size: .62rem;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  /* ---- transición entre pistas ---- */
+  .etapas-link {
+    position: relative;
+    padding: .55rem 0 .9rem 60px;
+    margin: -.1rem 0 .3rem;
+  }
+  .etapas-link-node {
+    position: absolute;
+    left: 17px;
+    top: .8rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid var(--hairline-strong);
+    background: var(--bg-dip);
+    box-shadow: 0 0 0 3px var(--bg-dip);
+  }
+  .etapas-tag {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    margin-bottom: .3rem;
+  }
+  .etapas-link p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: .95rem;
+    line-height: 1.55;
+    max-width: 52ch;
+  }
+  .etapas-link p strong { color: var(--ink-strong); font-weight: 600; }
+
+  /* ---- declaración + docs ---- */
+  .etapas-declare { margin: 2.6rem 0 1.6rem; }
+  .etapas-declare h3,
+  .etapas-docs h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.3rem;
+    letter-spacing: -0.01em;
+    color: var(--ink-strong);
+    margin: 0 0 .8rem;
+  }
+  .etapas-variants {
+    color: var(--text-secondary);
+    font-size: .95rem;
+    line-height: 1.6;
+    margin: .9rem 0 0;
+  }
+  .etapas-variants code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    color: var(--link);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-line);
+    padding: .06em .35em;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .etapas-docs { margin-top: 2.8rem; }
+  .etapas-doclist {
+    margin: 0;
+    display: grid;
+    gap: 0;
+  }
+  .etapas-doc {
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) 1fr;
+    gap: .2rem 1.4rem;
+    padding: .9rem 0;
+    border-top: 1px solid var(--hairline);
+    align-items: baseline;
+  }
+  .etapas-doc:last-child { border-bottom: 1px solid var(--hairline); }
+  .etapas-doc dt {
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    color: var(--link);
+    word-break: break-word;
+  }
+  .etapas-doc dd {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: .94rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 680px) {
+    .etapas-panel { grid-template-columns: 1fr; gap: .85rem; }
+    .etapas-doc { grid-template-columns: 1fr; gap: .25rem; }
+  }
+  @media (max-width: 460px) {
+    .etapas-legend { gap: .5rem 1rem; }
+    .etapas-run { padding-left: 46px; }
+    .etapas-link { padding-left: 46px; }
+    .etapas-panel { padding: 1rem 1rem 1.1rem; }
+  }
+</style>
+
+<section id="etapas" class="section alt">
+  <div class="container">
+    <p class="kicker reveal">05 · Etapas</p>
+    <h2 class="section-title reveal">Tres pistas, dificultad <em>creciente</em></h2>
+    <p class="section-lede reveal">
+      PAW te cambia las reglas en cada entrega. Auditar un TP1 con <code>JdbcTemplate</code> usando
+      reglas de Hibernate —o una SPA con reglas de JSP— es puro falso positivo. Por eso el kit es
+      <strong>etapa-aware</strong>: le declarás en qué pista estás y las skills activan solo las
+      reglas que corresponden.
+    </p>
+
+    <div class="etapas-legend reveal d1">
+      <span><i class="etapas-sym etapas-green" aria-hidden="true"></i> Verde · fácil</span>
+      <span><i class="etapas-sym etapas-blue" aria-hidden="true"></i> Azul · intermedia</span>
+      <span><i class="etapas-sym etapas-black" aria-hidden="true"></i> Diamante negro · experta</span>
+    </div>
+
+    <div class="etapas-map reveal d1">
+
+      <!-- ===== Pista verde ===== -->
+      <article class="etapas-run etapas-green">
+        <span class="etapas-mark etapas-green" aria-hidden="true"></span>
+        <div class="etapas-panel">
+          <div class="etapas-head">
+            <span class="etapas-diff">Verde · fácil</span>
+            <h3>Entrega 1 · Spring JDBC</h3>
+            <p class="etapas-stack">
+              <span class="chip">JdbcTemplate</span>
+              <span class="chip">SimpleJdbcInsert</span>
+              <span class="chip">RowMapper</span>
+            </p>
+          </div>
+          <ul class="etapas-rules">
+            <li><code>RowMapper</code> como <strong>private static final</strong>, compartido entre métodos — nunca la lambda inline duplicada por método.</li>
+            <li>Inserts con <code>SimpleJdbcInsert</code> + <code>usingGeneratedKeyColumns("id")</code>.</li>
+            <li>Escapá <code>%</code> y <code>_</code> en todo <code>LIKE</code> (más <code>ESCAPE '\'</code>); modelos de dominio <strong>inmutables</strong>, constructor-only y sin setters.</li>
+            <li class="etapas-caveat">La regla <code>em.flush()</code> antes del assert todavía NO aplica — es de la pista azul. Con <code>JdbcTemplate</code> el write pega directo en la BD.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- traverse verde -> azul -->
+      <div class="etapas-link">
+        <span class="etapas-link-node" aria-hidden="true"></span>
+        <span class="etapas-tag">Bajás a la próxima pista</span>
+        <p>
+          <strong>De JDBC a JPA</strong> con la skill <span class="cmd">/jdbc-to-jpa</span>
+          (alias <span class="cmd">/migrate</span>): un agregado por vez, con el build verde en cada
+          paso, siguiendo el playbook <code>migracion-jdbc-a-jpa.md</code>. JDBC y JPA conviven sin
+          drama — nunca migres dos agregados en el mismo commit.
+        </p>
+      </div>
+
+      <!-- ===== Pista azul ===== -->
+      <article class="etapas-run etapas-blue">
+        <span class="etapas-mark etapas-blue" aria-hidden="true"></span>
+        <div class="etapas-panel">
+          <div class="etapas-head">
+            <span class="etapas-diff">Azul · intermedia</span>
+            <h3>Entrega 2 · JPA / Hibernate</h3>
+            <p class="etapas-stack">
+              <span class="chip">EntityManager</span>
+              <span class="chip">@PersistenceContext</span>
+              <span class="chip">Flyway</span>
+            </p>
+          </div>
+          <ul class="etapas-rules">
+            <li><code>FetchType.EAGER</code> en cascada: default <strong>LAZY</strong> en todo <code>@ManyToOne</code>/<code>@OneToMany</code> (un EAGER = ~200 queries para paginar una lista).</li>
+            <li>Paginación con relaciones = <strong>modelo 1+1</strong>: query de IDs, después <code>JOIN FETCH ... WHERE id IN (:ids)</code> reordenado en memoria.</li>
+            <li><code>@Async</code> + relaciones lazy: materializá antes de cruzar el thread — el thread async no tiene la sesión Hibernate.</li>
+            <li>Tests de write con <code>em.flush()</code> <strong>antes</strong> del assert; sin flush, el <code>countRowsInTableWhere</code> lee la BD vacía y pasa sin testear nada.</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- traverse azul -> negro -->
+      <div class="etapas-link">
+        <span class="etapas-link-node" aria-hidden="true"></span>
+        <span class="etapas-tag">Bajás a la próxima pista</span>
+        <p>
+          <strong>De JPA a la final</strong>: el contrato REST se cierra primero (papel, no código),
+          y después el backend baja por olas ⇄ la SPA en espejo, pantalla por pantalla. Todo en
+          <code>entrega-final-spa-rest.md</code>. La capa de services que ya construiste no se toca:
+          es exactamente lo que la API expone.
+        </p>
+      </div>
+
+      <!-- ===== Pista negra / diamante ===== -->
+      <article class="etapas-run etapas-black">
+        <span class="etapas-mark etapas-black" aria-hidden="true"></span>
+        <div class="etapas-panel">
+          <div class="etapas-head">
+            <span class="etapas-diff">Diamante negro · experta</span>
+            <h3>Entrega Final · API REST + SPA</h3>
+            <p class="etapas-stack">
+              <span class="chip">JAX-RS / Jersey</span>
+              <span class="chip">JWT stateless</span>
+              <span class="chip">React / Vite</span>
+            </p>
+          </div>
+          <ul class="etapas-rules">
+            <li><strong>Contrato REST primero</strong>, en papel y antes del código (Fase 0): sustantivos en las URIs, verbos y códigos HTTP correctos.</li>
+            <li>Backend Jersey bajo <code>/api/*</code> sobre el mismo WAR — las JSP conviven hasta que su reemplazo esté verificado.</li>
+            <li>Auth <strong>STATELESS con JWT</strong> (access + refresh); se acabó el <code>JSESSIONID</code>.</li>
+            <li>Paginación por <strong>headers</strong> (<code>Link</code> + <code>X-Total-Count</code>), no metadata inventada en el body; SPA React pantalla por pantalla, en espejo con las olas del backend.</li>
+          </ul>
+        </div>
+      </article>
+
+    </div><!-- /etapas-map -->
+
+    <div class="etapas-declare reveal">
+      <h3>Cómo le declarás la etapa al agente</h3>
+      <p class="prose">
+        Va en el <code>CLAUDE.md</code> de tu repo (o en el <code>AGENTS.md</code>/<code>GEMINI.md</code>
+        si usás otro agente). Las skills de auditoría (<span class="cmd">/gp</span>,
+        <span class="cmd">/corrector-eyes</span>, <span class="cmd">/pre-delivery</span>) y los exports
+        leen esta declaración:
+      </p>
+      <pre class="code" data-copy>## Etapa de la cursada
+ETAPA ACTUAL: JDBC (Entrega 1)</pre>
+      <p class="etapas-variants">
+        Cuando migres la persistencia, cambiás la línea a
+        <code>ETAPA ACTUAL: JPA (Entrega 2+)</code>; y al arrancar la final,
+        <code>ETAPA ACTUAL: SPA+REST (Entrega Final)</code>.
+      </p>
+    </div>
+
+    <div class="callout reveal">
+      <strong>Declarala desde el día 1.</strong> Si no hay declaración, las skills asumen
+      <strong>JPA</strong> — y te comés findings de Hibernate en un TP que todavía usa
+      <code>JdbcTemplate</code>, o reglas de JSP sobre una SPA.
+    </div>
+
+    <div class="callout ice reveal">
+      <strong>paw_checks ya es etapa-aware.</strong> Si tu repo todavía no tiene
+      <code>db/migration/</code> (Flyway llega con o tras la migración), el check de versiones
+      Flyway duplicadas se saltea con un <em>warning</em> en vez de fallar.
+    </div>
+
+    <div class="etapas-docs reveal">
+      <h3>Qué doc de <code>etapas/</code> leer en cada momento</h3>
+      <dl class="etapas-doclist">
+        <div class="etapas-doc">
+          <dt>entrega-1-jdbc.md</dt>
+          <dd>Del día 1 hasta que la cátedra pida Hibernate: reglas JDBC y qué reglas del kit todavía NO aplican.</dd>
+        </div>
+        <div class="etapas-doc">
+          <dt>migracion-jdbc-a-jpa.md</dt>
+          <dd>Cuando llega la consigna de migrar: el playbook fase por fase y la skill <span class="cmd">/jdbc-to-jpa</span>, un DAO por vez.</dd>
+        </div>
+        <div class="etapas-doc">
+          <dt>entrega-2-jpa.md</dt>
+          <dd>Desde que el primer DAO es JPA: las trampas Hibernate que más nota costaron en la cohorte.</dd>
+        </div>
+        <div class="etapas-doc">
+          <dt>entrega-final-spa-rest.md</dt>
+          <dd>Cuando llega la consigna final: contrato REST, backend por olas + JWT stateless y SPA pantalla por pantalla.</dd>
+        </div>
+      </dl>
+    </div>
+
+  </div>
+</section>
+
+<style data-section="adopcion">
+  /* ============================================================
+     06 · INSTALAR · 07 · EXPORT · 08 · LETRA CHICA
+     re-skin "Technical Split" (StudyVaults ITBA)
+     ============================================================ */
+
+  /* ---- requisitos: 3 cards patrón StudyVaults ---- */
+  .adopcion-reqs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1rem;
+    margin: 2rem 0 2.5rem;
+  }
+  .adopcion-req {
+    position: relative;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+    padding: 1.3rem 1.35rem 1.4rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .adopcion-req:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--hairline-strong);
+  }
+  .adopcion-req::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0;
+    height: 2px; width: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--primary));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur) var(--ease);
+  }
+  .adopcion-req:hover::after { transform: scaleX(1); }
+  /* micro-label mono coral: "REQUISITO 0N" */
+  .adopcion-req-n {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+  .adopcion-req h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.08rem;
+    color: var(--ink-strong);
+    letter-spacing: -0.01em;
+    margin: .4rem 0 .45rem;
+    line-height: 1.2;
+  }
+  .adopcion-req h4 code { font-size: .82em; }
+  .adopcion-req p {
+    color: var(--text-secondary);
+    font-size: .9rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ---- nota verde del instalador (status-go, borde izquierdo verde) ---- */
+  .adopcion-what {
+    display: flex;
+    gap: .85rem;
+    align-items: flex-start;
+    background: color-mix(in srgb, var(--status-go) 9%, var(--surface-2));
+    border: 1px solid color-mix(in srgb, var(--status-go) 30%, var(--hairline));
+    border-left: 3px solid var(--status-go);
+    border-radius: var(--r-card);
+    padding: 1.1rem 1.25rem;
+    margin: 1.5rem 0;
+  }
+  .adopcion-what-mark {
+    font-family: var(--font-mono);
+    color: var(--status-go);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    flex: 0 0 auto;
+  }
+  .adopcion-what p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: .92rem;
+    line-height: 1.6;
+  }
+  .adopcion-what strong { color: var(--ink-strong); }
+  .adopcion-what code { font-size: .82em; }
+
+  /* ---- acordeón <details> tipo wikinav (instalación + FAQ) ---- */
+  .adopcion-details,
+  .adopcion-faq-item {
+    background: var(--surface-2);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-card);
+    overflow: hidden;
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+  .adopcion-details { margin: 1.75rem 0 0; }
+  .adopcion-details[open],
+  .adopcion-faq-item[open] { border-color: var(--primary-line); }
+  .adopcion-details > summary,
+  .adopcion-faq-item > summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: 1.05rem 1.25rem;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--ink-strong);
+    user-select: none;
+    transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+  }
+  .adopcion-details > summary::-webkit-details-marker,
+  .adopcion-faq-item > summary::-webkit-details-marker { display: none; }
+  .adopcion-details > summary:hover,
+  .adopcion-faq-item > summary:hover { background: var(--row-hover); }
+  /* abierto: summary con fondo primary-soft suave + texto --link (AA: cuerpo queda en surface-2) */
+  .adopcion-details[open] > summary,
+  .adopcion-faq-item[open] > summary {
+    background: var(--primary-soft);
+    color: var(--link);
+  }
+  /* chevron CSS fino (1.5px), sigue el color del summary */
+  .adopcion-details > summary::after,
+  .adopcion-faq-item > summary::after {
+    content: "";
+    flex: 0 0 auto;
+    margin-left: auto;
+    width: .5rem; height: .5rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    opacity: .55;
+    transition: transform var(--dur-fast) var(--ease);
+  }
+  .adopcion-details[open] > summary::after,
+  .adopcion-faq-item[open] > summary::after { transform: rotate(-135deg); }
+  /* badge celeste "manos libres" */
+  .adopcion-details-tag {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--link);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-line);
+    border-radius: var(--r-pill);
+    padding: .18rem .6rem;
+  }
+  .adopcion-details-body {
+    padding: 0 1.25rem 1.3rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .adopcion-details-body p {
+    color: var(--text-secondary);
+    font-size: .92rem;
+    line-height: 1.65;
+    margin: 1rem 0;
+  }
+
+  /* ---- grid de targets de export: card + ícono cuadradito mono ---- */
+  .adopcion-targets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: 1rem;
+    margin: 1.75rem 0;
+  }
+  .adopcion-target {
+    position: relative;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+    padding: 1.3rem 1.3rem 1.35rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .adopcion-target:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--hairline-strong);
+  }
+  .adopcion-target::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0;
+    height: 2px; width: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--primary));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur) var(--ease);
+  }
+  .adopcion-target:hover::after { transform: scaleX(1); }
+  .adopcion-target-head {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: 1rem;
+  }
+  /* ícono cuadradito: sigla mono, alterna coral (impares) / celeste (pares) */
+  .adopcion-target-ico {
+    flex: 0 0 auto;
+    width: 44px; height: 44px;
+    border-radius: var(--r-card);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent-text);
+  }
+  .adopcion-target:nth-child(even) .adopcion-target-ico {
+    background: var(--primary-soft);
+    border-color: var(--primary-line);
+    color: var(--link);
+  }
+  .adopcion-target-titles { min-width: 0; }
+  .adopcion-target-head h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: var(--ink-strong);
+    letter-spacing: -0.01em;
+    margin: 0;
+    line-height: 1.15;
+  }
+  .adopcion-target-flag {
+    display: block;
+    margin-top: .15rem;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    font-weight: 500;
+    letter-spacing: .02em;
+    color: var(--text-secondary);
+  }
+  .adopcion-target ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+  }
+  .adopcion-target li {
+    font-family: var(--font-mono);
+    font-size: .8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    padding-left: 1.1rem;
+    position: relative;
+    word-break: break-word;
+  }
+  .adopcion-target li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  .adopcion-target li b { color: var(--link); font-weight: 600; }
+  .adopcion-target-note {
+    display: block;
+    margin-top: .8rem;
+    font-family: var(--font-body);
+    font-size: .82rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  /* ---- FAQ accordion (mismos <details> wikinav; summary en Newsreader) ---- */
+  .adopcion-faq {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin: 2rem 0 2.5rem;
+  }
+  .adopcion-faq-item > summary {
+    font-size: .98rem;
+    line-height: 1.35;
+  }
+  .adopcion-faq-item > summary code { font-size: .8em; }
+  .adopcion-faq-body {
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .adopcion-faq-body p {
+    color: var(--text-secondary);
+    font-size: .92rem;
+    line-height: 1.65;
+    margin: 1rem 0 0;
+  }
+  .adopcion-faq-body strong { color: var(--ink-strong); }
+  .adopcion-faq-body code { font-size: .82em; }
+
+  /* ---- CTA final: panel surface-2 grande con glow interno ---- */
+  .adopcion-cta {
+    position: relative;
+    overflow: hidden;
+    margin-top: 3.75rem;
+    padding: clamp(2.5rem, 5vw, 3.25rem) clamp(1.5rem, 4vw, 2.5rem);
+    text-align: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-card);
+    box-shadow: var(--shadow-lg);
+  }
+  .adopcion-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(90% 120% at 20% 0%, var(--glow-coral), transparent 60%),
+      radial-gradient(85% 120% at 85% 12%, var(--glow-blue), transparent 62%);
+  }
+  .adopcion-cta > * { position: relative; z-index: 1; }
+  .adopcion-cta-eyebrow {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    margin: 0 0 .85rem;
+  }
+  .adopcion-cta h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    color: var(--ink-strong);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin: 0 auto 1rem;
+    max-width: 30ch;
+  }
+  .adopcion-cta h3 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent-text);
+  }
+  .adopcion-cta p {
+    color: var(--text-secondary);
+    font-size: .95rem;
+    line-height: 1.6;
+    max-width: 46ch;
+    margin: 0 auto 1.75rem;
+  }
+  .adopcion-cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.15rem;
+    flex-wrap: wrap;
+  }
+
+  /* ---- subtítulos de sección ---- */
+  .adopcion-h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: var(--ink-strong);
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+    margin: 2.5rem 0 .75rem;
+  }
+  .adopcion-h3.tight { margin-bottom: .25rem; }
+
+  @media (max-width: 480px) {
+    .adopcion-what { flex-direction: column; gap: .5rem; }
+    .adopcion-details > summary,
+    .adopcion-faq-item > summary { padding: .95rem 1rem; }
+  }
+</style>
+
+<!-- ====================== 06 · INSTALACIÓN ====================== -->
+<section id="instalar" class="section">
+  <div class="container">
+    <p class="kicker reveal">06 · Instalación</p>
+    <h2 class="section-title reveal">Un comando y a la pista.</h2>
+    <p class="section-lede reveal">
+      Sin dependencias que compilar, sin servicio que levantar. Clonás, corrés el
+      instalador apuntando a tu repo, reabrís Claude Code y ya tenés las skills, los
+      hooks y los checks adentro de tu proyecto.
+    </p>
+
+    <h3 class="adopcion-h3 tight reveal">Antes de arrancar</h3>
+    <div class="adopcion-reqs reveal">
+      <div class="adopcion-req">
+        <span class="adopcion-req-n">Requisito 01</span>
+        <h4>Claude Code</h4>
+        <p>La CLI o la app. Es el anfitrión que carga las skills y dispara los hooks.</p>
+      </div>
+      <div class="adopcion-req">
+        <span class="adopcion-req-n">Requisito 02</span>
+        <h4><code>python3</code></h4>
+        <p>Los hooks y <code>paw_checks.py</code> son <strong>stdlib puro</strong>: cero
+          dependencias, cero <code>pip install</code>.</p>
+      </div>
+      <div class="adopcion-req">
+        <span class="adopcion-req-n">Requisito 03</span>
+        <h4>Un proyecto PAW estándar</h4>
+        <p>Maven multi-módulo
+          (<code>models</code>/<code>persistence-contracts</code>/<code>persistence</code>/<code>service-contracts</code>/<code>services</code>/<code>webapp</code>),
+          Spring MVC + JSP, PostgreSQL + Flyway y HSQLDB para tests.</p>
+      </div>
+    </div>
+
+    <h3 class="adopcion-h3 reveal">El comando</h3>
+    <pre class="code reveal" data-copy>git clone &lt;este-repo&gt; paw-claude-kit
+cd paw-claude-kit
+./install.sh /ruta/a/tu/repo-paw              # tooling
+./install.sh /ruta/a/tu/repo-paw --with-docs  # tooling + convenciones en docs/</pre>
+
+    <div class="adopcion-what reveal">
+      <span class="adopcion-what-mark" aria-hidden="true">✔</span>
+      <p>
+        El instalador copia <code>claude/{skills,hooks,scripts}</code> al
+        <code>.claude/</code> de tu repo y mergea <code>settings-fragment.json</code> dentro
+        de tu <code>settings.local.json</code>: <strong>suma permisos sin pisar los
+        tuyos</strong>; los hooks del kit reemplazan el evento homónimo (si ya tenías hooks
+        propios en ese evento, revisá el merge). La variante <code>--with-docs</code> suma
+        las 15 convenciones de la cátedra a tu <code>docs/</code> (solo copia las que no
+        existían — no pisa nada).
+      </p>
+    </div>
+
+    <div class="callout reveal">
+      <strong>No te saltees este paso.</strong> Los hooks se cargan al <strong>arrancar la
+      sesión</strong>: recién commiteados en tu <code>.claude/</code> no hacen nada.
+      Cerrá y volvé a abrir Claude Code parado en el repo — si no, ni el
+      <span class="cmd">commit-gate</span> ni el resto se activan.
+    </div>
+
+    <details class="adopcion-details reveal">
+      <summary>
+        <span class="adopcion-details-tag">manos libres</span>
+        Alternativa: que lo instale tu Claude
+      </summary>
+      <div class="adopcion-details-body">
+        <p>¿No querés correr el script vos? Pegale esto a Claude Code parado en tu clon del
+          proyecto y que lo haga él (y de paso te explique qué instaló):</p>
+        <pre class="code" data-copy>Instalá el tooling de Claude Code desde &lt;ruta&gt;/paw-claude-kit:
+1) Copiá el contenido de claude/ (skills/, hooks/, scripts/) adentro de .claude/ de este repo.
+2) Mergeá settings-fragment.json dentro de mi .claude/settings.local.json: el bloque "hooks"
+   completo, y sumá a "permissions.allow" lo que no tenga — más mis permisos de Edit/Write
+   para la ruta de ESTE clon.
+3) Verificá: python3 .claude/scripts/paw_checks.py all debe dar i18n/flyway/jsp OK y los
+   4 hooks deben parsear.
+4) Leé el README del kit y explicame en una línea por elemento qué es cada cosa y cuándo
+   la uso. Aclarame que los hooks recién se activan en la PRÓXIMA sesión.</pre>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ====================== 07 · OTROS AGENTES ====================== -->
+<section id="export" class="section alt">
+  <div class="container">
+    <p class="kicker reveal">07 · Otros agentes</p>
+    <h2 class="section-title reveal">¿No usás Claude Code? El kit igual viaja.</h2>
+    <p class="section-lede reveal">
+      Es nativo de Claude Code, sí — pero casi todo su valor es <strong>texto</strong>:
+      prompts, reglas y un script de python. El exportador lo traduce a Codex CLI, Gemini
+      CLI o cualquier tool que lea <code>AGENTS.md</code> (Cursor, Windsurf, aider).
+    </p>
+
+    <pre class="code reveal" data-copy>python3 tools/export.py --target codex  --out /ruta/a/tu/repo   # AGENTS.md + .codex/prompts/
+python3 tools/export.py --target gemini --out /ruta/a/tu/repo   # GEMINI.md + .gemini/commands/paw/*.toml
+python3 tools/export.py --target agents --out /ruta/a/tu/repo   # AGENTS.md genérico + prompts/</pre>
+
+    <div class="adopcion-targets reveal">
+      <div class="adopcion-target">
+        <div class="adopcion-target-head">
+          <span class="adopcion-target-ico" aria-hidden="true">CX</span>
+          <div class="adopcion-target-titles">
+            <h4>Codex CLI</h4>
+            <span class="adopcion-target-flag">--target codex</span>
+          </div>
+        </div>
+        <ul>
+          <li><b>AGENTS.md</b> con las reglas operativas</li>
+          <li><b>.codex/prompts/*.md</b> — copialos a <code>~/.codex/prompts/</code>, se invocan <code>/nombre</code></li>
+        </ul>
+      </div>
+      <div class="adopcion-target">
+        <div class="adopcion-target-head">
+          <span class="adopcion-target-ico" aria-hidden="true">GM</span>
+          <div class="adopcion-target-titles">
+            <h4>Gemini CLI</h4>
+            <span class="adopcion-target-flag">--target gemini</span>
+          </div>
+        </div>
+        <ul>
+          <li><b>GEMINI.md</b> con las reglas operativas</li>
+          <li><b>.gemini/commands/paw/*.toml</b> — se invocan <code>/paw:nombre</code></li>
+        </ul>
+      </div>
+      <div class="adopcion-target">
+        <div class="adopcion-target-head">
+          <span class="adopcion-target-ico" aria-hidden="true">AG</span>
+          <div class="adopcion-target-titles">
+            <h4>Genérico</h4>
+            <span class="adopcion-target-flag">--target agents</span>
+          </div>
+        </div>
+        <ul>
+          <li><b>AGENTS.md</b> genérico (estándar emergente)</li>
+          <li><b>prompts/*.md</b> como comandos custom</li>
+        </ul>
+        <span class="adopcion-target-note">Para Cursor · Windsurf · aider y cualquier tool que lea AGENTS.md.</span>
+      </div>
+    </div>
+
+    <div class="callout ice reveal">
+      <strong>El gate de commits no se pierde: mejora.</strong> El hook
+      <span class="cmd">commit-gate</span> se traduce a un <strong>pre-commit hook de git
+      nativo</strong> (<code>tools/git-hooks/pre-commit</code>) — agente-agnóstico, corre los
+      mismos <code>paw_checks.py all</code>. Lo activás con
+      <code>git config core.hooksPath tools/git-hooks</code> y aplica hasta a tus commits a mano.
+    </div>
+
+    <div class="prose reveal">
+      <p>
+        Honestidad de traducción: lo que sí se degrada son los avisos <strong>en-el-turno</strong>
+        del hook i18n (pasan a regla en <code>AGENTS.md</code> + el pre-commit), y el bloqueo
+        mecánico del <span class="cmd">db-server-guard</span>, que queda a disciplina del modelo
+        (en tools con allowlist, sumá <code>psql</code>/<code>jetty:run</code> a los bloqueados).
+        El mapeo completo, target por target, está en <code>PORTING.md</code>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== 08 · LETRA CHICA ====================== -->
+<section id="faq" class="section">
+  <div class="container narrow">
+    <p class="kicker reveal">08 · Letra chica</p>
+    <h2 class="section-title reveal">Lo que conviene saber antes.</h2>
+    <p class="section-lede reveal">
+      Cero humo también significa cero sorpresas. Estas son las aclaraciones honestas —
+      abrí la que te toque.
+    </p>
+
+    <div class="adopcion-faq reveal">
+      <details class="adopcion-faq-item">
+        <summary>¿Esto me sirve si mi grupo no es el 10?</summary>
+        <div class="adopcion-faq-body">
+          <p>
+            Sí. La única pieza atada al Grupo 10 es
+            <code>docs/correcciones-cohorte.md</code>: trae feedback y notas reales del
+            <strong>Grupo 10 (2026-1C)</strong> — el ejemplo más completo de qué castiga el
+            corrector, pero <strong>revisalo antes de difundirlo fuera de tu grupo</strong>.
+            Bajalo con <code>--with-docs</code> y adaptá nombres de clases, notas y findings a
+            tu propio proyecto.
+          </p>
+        </div>
+      </details>
+
+      <details class="adopcion-faq-item">
+        <summary>¿Necesito el wiki de Obsidian?</summary>
+        <div class="adopcion-faq-body">
+          <p>
+            No. <code>wiki-sync</code> y algunas auditorías citan un wiki externo de Obsidian,
+            pero <strong>sin él degradan con gracia</strong> apoyándose solo en tu
+            <code>docs/</code>. El wiki es un plus, no un requisito.
+          </p>
+        </div>
+      </details>
+
+      <details class="adopcion-faq-item">
+        <summary>¿frontend-analyzer contra qué corre?</summary>
+        <div class="adopcion-faq-body">
+          <p>
+            <strong>Solo contra <code>localhost</code>.</strong> Nunca contra el deploy del
+            pawserver de la cátedra — esa máquina es de todos, no tu banco de pruebas.
+          </p>
+        </div>
+      </details>
+
+      <details class="adopcion-faq-item">
+        <summary>Mi proyecto recién arranca y todavía no tiene <code>webapp/</code></summary>
+        <div class="adopcion-faq-body">
+          <p>
+            <code>paw_checks.py</code> asume la estructura Maven estándar. Sin
+            <code>db/migration/</code>, el check de Flyway <strong>se saltea con un
+            warning</strong>; sin <code>webapp/</code>, el de i18n sí falla — el instalador
+            te lo avisa al verificar. En cuanto exista la estructura, corren solos.
+          </p>
+        </div>
+      </details>
+
+      <details class="adopcion-faq-item">
+        <summary>¿Sirve para otra materia u otro stack?</summary>
+        <div class="adopcion-faq-body">
+          <p>
+            Corré <code>/port &lt;ruta-del-proyecto-destino&gt;</code>: detecta el stack,
+            entrevista lo que falte y reescribe rutas y reglas para el proyecto nuevo. La guía
+            manual de qué es project-specific y qué no vive en
+            <code>claude/skills/README.md</code> §Portabilidad.
+          </p>
+        </div>
+      </details>
+
+      <details class="adopcion-faq-item">
+        <summary>¿Qué me conviene crear en mi repo?</summary>
+        <div class="adopcion-faq-body">
+          <p>
+            Tres archivos que las skills referencian: <code>0_Plans/</code> para tus planes,
+            <code>0_Plans/BUGS.md</code> (lo crea <code>/bug</code> al primer uso) y
+            <code>0_Plans/audits/ADJUDICACIONES.md</code>, el registro de falsos positivos ya
+            cerrados <strong>para que las auditorías no re-litiguen</strong> lo que ya
+            resolviste.
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <div class="adopcion-cta reveal">
+      <p class="adopcion-cta-eyebrow">Fin del descenso</p>
+      <h3>El corrector es la <em>montaña</em>. Esto es tu equipo de escalada.</h3>
+      <p>
+        Clonás, corrés el instalador, reabrís la sesión. Diez minutos hoy contra doce
+        puntos de fricción que ya sabés que vienen. Poné los crampones.
+      </p>
+      <div class="adopcion-cta-actions">
+        <a href="#instalar" class="btn">Instalar el kit ↑</a>
+        <span class="stamp ok" aria-hidden="true">Promocionado</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <span class="footer-logo"><span class="p">paw</span>-claude-kit</span>
+    <span>Grupo 10 · PAW 2026-1C · ITBA — construido y validado durante la cursada real.</span>
+  </div>
+</footer>
+
+<script>
+// reveal on scroll
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// toggle claro/oscuro
+document.querySelector('.theme-toggle').addEventListener('click', () => {
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem('paw-theme', next); } catch (e) {}
+});
+
+// nav: hairline + link activo
+const nav = document.querySelector('.nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 10), { passive: true });
+const links = [...document.querySelectorAll('.nav-links a')];
+const secs = links.map(a => document.querySelector(a.hash)).filter(Boolean);
+const spy = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  links.forEach(a => a.classList.toggle('active', a.hash === '#' + e.target.id));
+}), { rootMargin: '-30% 0px -60% 0px' });
+secs.forEach(s => spy.observe(s));
+
+// botones de copiar en pre[data-copy]
+document.querySelectorAll('pre[data-copy]').forEach(pre => {
+  const wrap = document.createElement('div');
+  wrap.className = 'copy-wrap';
+  pre.parentNode.insertBefore(wrap, pre);
+  wrap.appendChild(pre);
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn'; btn.type = 'button'; btn.textContent = 'copiar';
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(pre.textContent.trim());
+      btn.textContent = 'copiado ✓'; btn.classList.add('ok');
+      setTimeout(() => { btn.textContent = 'copiar'; btn.classList.remove('ok'); }, 1800);
+    } catch { btn.textContent = 'error'; }
+  });
+  wrap.appendChild(btn);
+});
+
+// ambient: campo de partículas (firma StudyVaults)
+(() => {
+  const canvas = document.querySelector('.ambient__canvas');
+  if (!canvas || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, parts;
+  const colorOf = k => getComputedStyle(document.documentElement)
+    .getPropertyValue(k === 'b' ? '--particle-blue' : '--particle-coral').trim();
+  const resize = () => {
+    w = canvas.width = innerWidth * devicePixelRatio;
+    h = canvas.height = innerHeight * devicePixelRatio;
+  };
+  const seed = () => {
+    parts = Array.from({ length: 46 }, () => ({
+      x: Math.random() * w, y: Math.random() * h,
+      r: (Math.random() * 1.4 + .6) * devicePixelRatio,
+      vx: (Math.random() - .5) * .12 * devicePixelRatio,
+      vy: (Math.random() - .5) * .12 * devicePixelRatio,
+      k: Math.random() < .68 ? 'b' : 'c',
+    }));
+  };
+  resize(); seed();
+  addEventListener('resize', () => { resize(); seed(); }, { passive: true });
+  let cb = colorOf('b'), cc = colorOf('c');
+  new MutationObserver(() => { cb = colorOf('b'); cc = colorOf('c'); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  (function tick() {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of parts) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -8) p.x = w + 8; if (p.x > w + 8) p.x = -8;
+      if (p.y < -8) p.y = h + 8; if (p.y > h + 8) p.y = -8;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.k === 'b' ? cb : cc;
+      ctx.fill();
+    }
+    requestAnimationFrame(tick);
+  })();
+})();
+</script>
+</body>
+</html>
