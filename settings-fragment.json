@@ -1,0 +1,58 @@
+{
+  "_leeme": "Fragment para mergear en <repo>/.claude/settings.local.json — NO reemplaza el archivo entero. El bloque 'hooks' va completo; de 'permissions.allow' sumá lo que te falte y agregá tus propios Edit/Write con la ruta de TU clon del repo.",
+  "permissions": {
+    "allow": [
+      "Bash(mvn compile *)",
+      "Bash(mvn test *)",
+      "Bash(mvn package *)",
+      "Bash(mvn install *)",
+      "Bash(mvn clean *)",
+      "Bash(mvn -q *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(ls *)",
+      "Bash(wc *)",
+      "Bash(jq *)",
+      "Bash(git *)",
+      "Bash(python3 .claude/scripts/*)"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/skill-autolaunch.py\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/i18n-parity-posttool.py\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/commit-gate.py\""
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/db-server-guard.py\""
+          }
+        ]
+      }
+    ]
+  }
+}
