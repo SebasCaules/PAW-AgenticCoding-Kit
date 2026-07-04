@@ -12,12 +12,19 @@ Buscá en este archivo (o en el doc de instrucciones del repo) la línea `ETAPA 
 - `ETAPA ACTUAL: JDBC (Entrega 1)` → la persistencia usa Spring JDBC (`JdbcTemplate`,
   `SimpleJdbcInsert`, `RowMapper` estático compartido). NO apliques ni exijas reglas JPA
   (EAGER/LAZY, modelo 1+1, `em.flush()` en tests, `@Formula`) — todavía no existen en el código.
-- `ETAPA ACTUAL: JPA (Entrega 2+)` → aplican TODAS las reglas, incluidas las trampas Hibernate
-  (fetch LAZY por defecto, paginación 1+1, `@Async` sin lazy sin materializar, `em.flush()` antes
-  de asserts, `@Formula` para contadores).
-- La migración de una a otra sigue `docs/hibernate-migration.md` (checklist por archivo).
+- `ETAPA ACTUAL: JPA (Entrega 2+)` → aplican TODAS las reglas backend, incluidas las trampas
+  Hibernate (fetch LAZY por defecto, paginación 1+1, `@Async` sin lazy sin materializar,
+  `em.flush()` antes de asserts, `@Formula` para contadores).
+- `ETAPA ACTUAL: SPA+REST (Entrega Final)` → el backend expone API REST (JAX-RS bajo `/api/*`,
+  JWT stateless, DTOs con links, paginación por headers, ExceptionMappers) y el front es una SPA.
+  Las reglas JSP (`<c:out>`, `<c:url>`, `<spring:message>`, `<sec:authorize>`) aplican SOLO a
+  vistas legacy aún vivas; en el front nuevo: prohibido `dangerouslySetInnerHTML`, estado en la
+  URL, i18n en catálogos del front, deep-linking con catch-all. La lógica de negocio sigue TODA
+  en los services — un resource JAX-RS gordo es el mismo pecado que un controller MVC gordo.
+- Migraciones entre etapas: `docs/hibernate-migration.md` (JDBC→JPA) y
+  `etapas/entrega-final-spa-rest.md` del kit (JSP→SPA+REST).
 
-<!-- ETAPA ACTUAL: (declarala acá — JDBC (Entrega 1) | JPA (Entrega 2+)) -->
+<!-- ETAPA ACTUAL: (declarala acá — JDBC (Entrega 1) | JPA (Entrega 2+) | SPA+REST (Entrega Final)) -->
 
 ## Reglas operativas (innegociables)
 

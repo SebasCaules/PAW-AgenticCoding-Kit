@@ -263,5 +263,6 @@ $ARGUMENTS
 
 Antes de auditar, buscá la línea `ETAPA ACTUAL:` en el CLAUDE.md / AGENTS.md / GEMINI.md del repo.
 - **`JDBC (Entrega 1)`**: NO flagees reglas JPA (EAGER/LAZY, modelo 1+1, `em.flush()` en tests, `@Formula`, FK mapeada como entidad) — ese código no existe todavía. SÍ exigí las reglas JDBC: `RowMapper` `private static final` compartido (nunca lambda inline duplicada ni re-mapear entidades de otro dominio), `SimpleJdbcInsert`, modelos inmutables constructor-only, escape de `%`/`_` en LIKE.
-- **`JPA (Entrega 2+)`** o sin declaración: aplica el set completo, incluidas las trampas TP2 de Hibernate.
-Detalle por etapa: `etapas/entrega-1-jdbc.md` y `etapas/entrega-2-jpa.md` del kit.
+- **`JPA (Entrega 2+)`** o sin declaración: aplica el set completo backend, incluidas las trampas TP2 de Hibernate.
+- **`SPA+REST (Entrega Final)`**: las reglas JSP (`<c:out>`, `<c:url>`, `<spring:message>`, `<sec:authorize>`) aplican SOLO a vistas legacy aún vivas. El código nuevo se audita con las reglas REST/SPA: resources JAX-RS finos (lógica en services), DTOs explícitos que ocultan campos sensibles, verbos/códigos HTTP correctos, paginación por headers, JWT stateless, y en el front prohibido `dangerouslySetInnerHTML`, estado en la URL, i18n en catálogos del front.
+Detalle por etapa: `etapas/entrega-1-jdbc.md`, `etapas/entrega-2-jpa.md` y `etapas/entrega-final-spa-rest.md` del kit.

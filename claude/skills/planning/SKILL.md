@@ -113,4 +113,4 @@ Cerrar con:
 
 ## Etapa de la cursada (JDBC vs JPA)
 
-La capa de persistencia se genera según la línea `ETAPA ACTUAL:` del CLAUDE.md / AGENTS.md del repo: con `JDBC (Entrega 1)` → DAOs con `JdbcTemplate` + `SimpleJdbcInsert` + `RowMapper` estático y modelos inmutables constructor-only (nada de anotaciones JPA); con `JPA (Entrega 2+)` o sin declaración → DAOs `EntityManager`/JPA como describe el resto de esta skill. Para pasar de una a otra: skill `/jdbc-to-jpa` + `etapas/migracion-jdbc-a-jpa.md`.
+La capa de persistencia se genera según la línea `ETAPA ACTUAL:` del CLAUDE.md / AGENTS.md del repo: con `JDBC (Entrega 1)` → DAOs con `JdbcTemplate` + `SimpleJdbcInsert` + `RowMapper` estático y modelos inmutables constructor-only (nada de anotaciones JPA); con `JPA (Entrega 2+)` o sin declaración → DAOs `EntityManager`/JPA como describe el resto de esta skill. Para pasar de una a otra: skill `/jdbc-to-jpa` + `etapas/migracion-jdbc-a-jpa.md`. Con `SPA+REST (Entrega Final)`: lo nuevo del backend son resources JAX-RS + DTOs (los services no cambian) y lo nuevo del front es React — no generar JSP nuevas; seguir `etapas/entrega-final-spa-rest.md`.

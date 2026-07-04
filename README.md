@@ -1,6 +1,6 @@
 # paw-claude-kit
 
-**Tooling de agentic coding para cursar PAW (Proyecto de Aplicaciones Web · ITBA)** — 18 skills, 4 hooks, 1 script de checks determinísticos, las convenciones de la cátedra en `docs/`, guías por **etapa de la cursada** (JDBC → migración → JPA) y un **exportador a otros agentes** (Codex, Gemini CLI, AGENTS.md genérico). Nativo de Claude Code, instalable con un comando.
+**Tooling de agentic coding para cursar PAW (Proyecto de Aplicaciones Web · ITBA)** — 18 skills, 4 hooks, 1 script de checks determinísticos, las convenciones de la cátedra en `docs/`, guías por **etapa de la cursada** (JDBC → JPA → SPA+REST) y un **exportador a otros agentes** (Codex, Gemini CLI, AGENTS.md genérico). Nativo de Claude Code, instalable con un comando.
 
 Nació del proyecto del **Grupo 10 (2026-1C, "Rent The Slopes")**: después de una meta-auditoría de ~113 sesiones de Claude Code se detectaron los 12 puntos de fricción más caros de la cursada (keys i18n que rompen en runtime, migraciones Flyway duplicadas post-merge, iteración visual a ciegas, auditorías que re-flagean falsos positivos, "tests verdes ≠ la app anda"...) y se construyó este kit para eliminarlos. Todo lo que hay acá está batalla-probado sobre un TP real de la materia.
 
@@ -39,19 +39,21 @@ Instalá el tooling de Claude Code desde <ruta>/paw-claude-kit:
 ```
 </details>
 
-## Etapas de la cursada: JDBC (Entrega 1) → JPA (Entrega 2)
+## Etapas de la cursada: JDBC (Entrega 1) → JPA (Entrega 2) → SPA+REST (Final)
 
-PAW arranca con **Spring JDBC** y recién en la segunda entrega migra a **JPA/Hibernate** — y las
-reglas de cada etapa son distintas (auditar un TP1 con reglas de Hibernate genera puro falso
-positivo). El kit es etapa-aware: declarás en tu `CLAUDE.md` la línea
-**`ETAPA ACTUAL: JDBC (Entrega 1)`** (o `JPA (Entrega 2+)`) y las skills de planificación y
-auditoría calibran solas qué exigir.
+PAW arranca con **Spring JDBC**, en la segunda entrega migra la persistencia a **JPA/Hibernate**,
+y en la **final** el webapp JSP se convierte en **API REST + SPA** — y las reglas de cada etapa
+son distintas (auditar un TP1 con reglas de Hibernate, o una SPA con reglas de JSP, genera puro
+falso positivo). El kit es etapa-aware: declarás en tu `CLAUDE.md` la línea
+**`ETAPA ACTUAL: JDBC (Entrega 1)`** (o `JPA (Entrega 2+)` / `SPA+REST (Entrega Final)`) y las
+skills de planificación y auditoría calibran solas qué exigir.
 
 | Doc | Qué cubre |
 |---|---|
 | [`entrega-1-jdbc.md`](etapas/entrega-1-jdbc.md) | Reglas de la etapa JDBC (RowMapper estático, SimpleJdbcInsert, modelos inmutables, escape de LIKE) + qué reglas JPA NO aplican todavía + snippet de declaración |
-| [`migracion-jdbc-a-jpa.md`](etapas/migracion-jdbc-a-jpa.md) | Playbook de la migración: fase 0 de infra, orden por agregado (hojas primero), checklist por DAO, errores clásicos. Se ejecuta con la skill [`jdbc-to-jpa`](claude/skills/jdbc-to-jpa/SKILL.md) |
+| [`migracion-jdbc-a-jpa.md`](etapas/migracion-jdbc-a-jpa.md) | Playbook de la migración de persistencia: fase 0 de infra, orden por agregado (hojas primero), checklist por DAO, errores clásicos. Se ejecuta con la skill [`jdbc-to-jpa`](claude/skills/jdbc-to-jpa/SKILL.md) |
 | [`entrega-2-jpa.md`](etapas/entrega-2-jpa.md) | Las 9 trampas TP2 de Hibernate (EAGER cascada, modelo 1+1, `@Async`+lazy, `em.flush()`...) y la tabla de qué cambia respecto de la Entrega 1 |
+| [`entrega-final-spa-rest.md`](etapas/entrega-final-spa-rest.md) | La migración JSP → SPA + REST API: el contrato primero, backend por olas (Jersey `/api/*`, JWT stateless, DTOs con links, paginación por headers, ExceptionMappers), SPA pantalla-por-pantalla en espejo, tabla "qué regla JSP muere y cuál la reemplaza" y las trampas reales |
 
 Empezá por [`etapas/README.md`](etapas/README.md).
 
@@ -117,6 +119,7 @@ traducción — está en [`PORTING.md`](PORTING.md).
 Arranque de cursada:  declarar "ETAPA ACTUAL: JDBC (Entrega 1)" en CLAUDE.md (ver etapas/)
 Feature nueva:        /plan → /impl → /gp → commit (el gate corre solo)
 Llega la Entrega 2:   /jdbc-to-jpa fase-0 → /jdbc-to-jpa <agregado> (uno por vez) → ETAPA: JPA
+Llega la Final:       contrato REST en 0_Plans/ → olas backend ⇄ SPA (etapas/entrega-final-spa-rest.md) → ETAPA: SPA+REST
 Ajuste visual:        /enhance → (verificación renderizada automática) → /i18n
 Chequeo rápido:       /smoke
 Antes de entregar:    /smoke → /deliver → /corrector

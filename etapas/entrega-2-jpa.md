@@ -60,3 +60,10 @@ transversal (XSS, i18n, ownership, layering) siguen idénticos.
 Todas, con `ETAPA ACTUAL: JPA` declarada — `/gp` y `/corrector-eyes` activan el set completo de
 trampas Hibernate, `/deliver` exige paridad Flyway↔schema de test, y `/jdbc-to-jpa` te queda para
 los DAOs que falten migrar.
+
+## Señal de que esta etapa termina
+
+La cátedra publica la consigna de la **entrega final** (API REST + SPA). Antes de escribir el
+primer endpoint, leé [`entrega-final-spa-rest.md`](entrega-final-spa-rest.md): en esa migración
+el contrato se cierra en papel ANTES que el código, y la capa de services que construiste en
+estas dos etapas queda intacta — es exactamente lo que la API va a exponer.
