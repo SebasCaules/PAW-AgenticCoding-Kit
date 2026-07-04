@@ -156,3 +156,8 @@ Luego un bloque "Próximos pasos" con:
 - Comandos sugeridos (ej. `mvn -pl persistence test`).
 - Recordatorio de correr `/gp` antes de commitear.
 - Puntos que no se pudieron resolver automáticamente (si los hay).
+
+
+## Etapa de la cursada (JDBC vs JPA)
+
+La capa de persistencia se genera según la línea `ETAPA ACTUAL:` del CLAUDE.md / AGENTS.md del repo: con `JDBC (Entrega 1)` → DAOs con `JdbcTemplate` + `SimpleJdbcInsert` + `RowMapper` estático y modelos inmutables constructor-only (nada de anotaciones JPA); con `JPA (Entrega 2+)` o sin declaración → DAOs `EntityManager`/JPA como describe el resto de esta skill. Para pasar de una a otra: skill `/jdbc-to-jpa` + `etapas/migracion-jdbc-a-jpa.md`.

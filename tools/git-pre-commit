@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# pre-commit hook de git — traducción agente-agnóstica del hook "commit-gate" de Claude Code.
+# Corre los checks determinísticos del proyecto antes de cada commit, sin importar qué
+# agente (o humano) esté commiteando.
+#
+# Activación (una vez, en el repo):
+#   git config core.hooksPath tools/git-hooks
+# Bypass puntual (equivalente a PAW_SKIP_SMOKE=1):
+#   git commit --no-verify
+set -uo pipefail
+
+# El script puede vivir en tools/ (export a otros agentes) o en .claude/scripts/ (Claude Code).
+for CANDIDATE in "tools/paw_checks.py" ".claude/scripts/paw_checks.py"; do
+    if [ -f "$CANDIDATE" ]; then
+        if python3 "$CANDIDATE" all; then
+            exit 0
+        else
+            echo ""
+            echo "✖ Commit bloqueado por los checks del proyecto (arreglá lo de arriba)."
+            echo "  Para commitear igual (con autorización del equipo): git commit --no-verify"
+            exit 1
+        fi
+    fi
+done
+# Sin script de checks → no bloquear.
+exit 0

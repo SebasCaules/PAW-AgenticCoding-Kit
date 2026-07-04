@@ -68,6 +68,7 @@ Las marcadas **✦** son genéricas/portables (no acopladas a PAW).
 | Skill | Alias | Modelo | Cuándo |
 |---|---|---|---|
 | `wiki-sync` | `/wiki` | ⚖️ | Detecta páginas del wiki de Obsidian desincronizadas tras cambios de código y propone updates. (El hook de auto-launch la sugiere al terminar/mergear una feature.) |
+| `jdbc-to-jpa` | `/migrate` | (hereda) | Migra la persistencia JDBC → JPA un agregado por vez (Entrega 2): entidades, JpaDao, patrón 1+1, tests con `em.flush()`. Sigue `etapas/migracion-jdbc-a-jpa.md` del kit. |
 
 > `sprint-status` (sprints terminados) está archivada en `.claude/skills-archived/`.
 
@@ -220,5 +221,5 @@ Cuando el corrector publique nuevas indicaciones o cambien las convenciones del 
 
 **Stack:** Spring MVC 5.3.33 · Java 21 · Maven multi-módulo · JPA/Hibernate · PostgreSQL (prod, Flyway) · HSQLDB (test) · JUnit 5 · Mockito
 **Etapa actual:** entrega final — migración REST + SPA (ver `0_Plans/rest-migration/final/README.md`)
-**Skills totales:** 17 activas (+4 archivadas en `.claude/skills-archived/`)
+**Skills totales:** 18 activas (+4 archivadas en `.claude/skills-archived/`)
 **Hooks del proyecto** (`.claude/hooks/`, registrados en `settings.local.json`): `skill-autolaunch` (sugerencias con guards anti-falso-positivo) · `i18n-parity-posttool` (paridad de bundles al editarlos) · `commit-gate` (corre `paw_checks.py` antes de todo `git commit`; bypass `PAW_SKIP_SMOKE=1`) · `db-server-guard` (bloquea `psql`/`jetty:run` — el usuario ejecuta; bypass `PAW_ALLOW_DB=1`). Script compartido: `.claude/scripts/paw_checks.py`.

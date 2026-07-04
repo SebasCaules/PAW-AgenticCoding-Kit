@@ -253,3 +253,11 @@ Antes de reportar, leé [`0_Plans/audits/ADJUDICACIONES.md`](../../../0_Plans/au
 ## Área a enfocar (opcional)
 
 $ARGUMENTS
+
+
+## Etapa de la cursada (JDBC vs JPA) — calibración obligatoria
+
+Antes de auditar, buscá la línea `ETAPA ACTUAL:` en el CLAUDE.md / AGENTS.md / GEMINI.md del repo.
+- **`JDBC (Entrega 1)`**: NO flagees reglas JPA (EAGER/LAZY, modelo 1+1, `em.flush()` en tests, `@Formula`, FK mapeada como entidad) — ese código no existe todavía. SÍ exigí las reglas JDBC: `RowMapper` `private static final` compartido (nunca lambda inline duplicada ni re-mapear entidades de otro dominio), `SimpleJdbcInsert`, modelos inmutables constructor-only, escape de `%`/`_` en LIKE.
+- **`JPA (Entrega 2+)`** o sin declaración: aplica el set completo, incluidas las trampas TP2 de Hibernate.
+Detalle por etapa: `etapas/entrega-1-jdbc.md` y `etapas/entrega-2-jpa.md` del kit.

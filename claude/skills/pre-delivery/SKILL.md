@@ -182,3 +182,8 @@ Si todo verde:
 ## Opciones (opcional)
 
 $ARGUMENTS
+
+
+## Etapa de la cursada (JDBC vs JPA)
+
+El Bloque 6 (Persistencia) se evalúa según la línea `ETAPA ACTUAL:` del CLAUDE.md / AGENTS.md del repo. Con `ETAPA ACTUAL: JDBC (Entrega 1)`: los checks JPA (LAZY/EAGER, 1+1, `em.flush()`, FK-entidad, paridad Flyway) NO aplican — en su lugar verificá: RowMapper estático compartido, SimpleJdbcInsert, un DAO por tabla, escape de LIKE, `java.sql.*` solo en persistence, y que el schema.sql esté al día. Con `JPA (Entrega 2+)` o sin declaración: Bloque 6 completo tal como está arriba.

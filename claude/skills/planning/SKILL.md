@@ -109,3 +109,8 @@ Cerrar con:
 - **Preguntas abiertas** al usuario antes de ejecutar (si hay).
 - **Referencias** a páginas del wiki que conviene releer durante la impl.
 - **Plan** agregado a la carpeta 0_Plans con un nombre descriptivo (`feature-x-plan.md`).
+
+
+## Etapa de la cursada (JDBC vs JPA)
+
+La capa de persistencia se genera según la línea `ETAPA ACTUAL:` del CLAUDE.md / AGENTS.md del repo: con `JDBC (Entrega 1)` → DAOs con `JdbcTemplate` + `SimpleJdbcInsert` + `RowMapper` estático y modelos inmutables constructor-only (nada de anotaciones JPA); con `JPA (Entrega 2+)` o sin declaración → DAOs `EntityManager`/JPA como describe el resto de esta skill. Para pasar de una a otra: skill `/jdbc-to-jpa` + `etapas/migracion-jdbc-a-jpa.md`.

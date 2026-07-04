@@ -86,7 +86,9 @@ def check_flyway():
     Warning (no error) si la migración más nueva es posterior al schema.sql de test."""
     errors = []
     if not MIGRATIONS_DIR.exists():
-        return [f"flyway: no existe {MIGRATIONS_DIR}"]
+        # Etapa JDBC (Entrega 1): todavía no hay Flyway — no es un error.
+        print(f"WARNING flyway: no existe {MIGRATIONS_DIR} (¿proyecto en etapa JDBC sin Flyway aún?) — check salteado.")
+        return []
     versions = {}
     newest_mtime = 0.0
     for f in MIGRATIONS_DIR.iterdir():
