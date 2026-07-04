@@ -1,8 +1,15 @@
-# paw-claude-kit
+<div align="center">
+
+# PAW-AgenticCoding-Kit
 
 **Tooling de agentic coding para cursar PAW (Proyecto de Aplicaciones Web · ITBA).**
-18 skills · 4 hooks · checks determinísticos · las convenciones de la cátedra · guías por etapa
-(JDBC → JPA → SPA+REST) · exportador a otros agentes. Nativo de Claude Code, instalable con un comando.
+
+⚡ 18 skills · 🪝 4 hooks · 🐍 checks determinísticos · 📚 las convenciones de la cátedra<br/>
+🧭 guías por etapa (JDBC → JPA → SPA+REST) · 🔁 exportador a otros agentes
+
+*Nativo de Claude Code, instalable con un comando.*
+
+</div>
 
 > Nació del TP real del **Grupo 10 (2026-1C, "Rent The Slopes")**: una meta-auditoría de ~113
 > sesiones de Claude Code detectó los 12 puntos de fricción más caros de la cursada — keys i18n
@@ -26,31 +33,60 @@
 
 ```mermaid
 flowchart LR
-    subgraph VOS["Vos"]
-        P["escribís un prompt"]
-        G["git commit"]
+    subgraph VOS["👤&nbsp;&nbsp;Vos"]
+        direction TB
+        P(["✍️ escribís un prompt"])
+        G(["📦 git commit"])
     end
 
-    subgraph KIT["El kit (.claude/ de tu repo)"]
-        SA["hook skill-autolaunch<br/>sugiere la skill correcta"]
-        SK["18 skills<br/>/plan · /gp · /deliver · /corrector ..."]
-        CG["hook commit-gate<br/>checks antes de cada commit"]
-        PC["paw_checks.py<br/>i18n · Flyway · JSTL"]
+    subgraph FUENTE["📚&nbsp;&nbsp;Fuente de verdad"]
+        direction TB
+        D["docs/<br/>convenciones de la cátedra"]
+        E["ETAPA ACTUAL — CLAUDE.md<br/>JDBC → JPA → SPA+REST"]
     end
 
-    subgraph FUENTES["Fuente de verdad"]
-        D["docs/ — convenciones de la cátedra"]
-        E["ETAPA ACTUAL en CLAUDE.md<br/>JDBC · JPA · SPA+REST"]
+    subgraph KIT["🧰&nbsp;&nbsp;El kit — vive en .claude/ de tu repo"]
+        direction LR
+        SA["🪝 skill-autolaunch<br/><i>sugiere la skill correcta</i>"]
+        SK["⚡ 18 skills<br/>/plan · /impl · /gp · /deliver<br/>/corrector · /jdbc-to-jpa …"]
+        CG["🪝 commit-gate<br/><i>ningún commit sin checks</i>"]
+        PC[["🐍 paw_checks.py<br/>i18n · Flyway · JSTL"]]
+        SA --> SK
+        CG --> PC
     end
 
-    P --> SA --> SK
-    SK -- leen --> D
-    SK -- calibran reglas según --> E
-    G --> CG --> PC
-    PC -- "falla → commit bloqueado" --> G
+    RES(["✅ código según<br/>las convenciones"])
+    OK(["✔ commit pasa"])
+    NO(["⛔ bloqueado con el detalle<br/>— arreglás y reintentás"])
+
+    P --> SA
+    G --> CG
+    D -. "las skills leen" .-> SK
+    E -. "calibra qué exigir" .-> SK
+    SK --> RES
+    PC -- "checks OK" --> OK
+    PC -- "algo roto" --> NO
+
+    classDef vos fill:#EDE9FE,stroke:#7C3AED,color:#312E81
+    classDef kit fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A
+    classDef checks fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E
+    classDef fuente fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef ok fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef bad fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    class P,G vos
+    class SA,SK,CG kit
+    class PC checks
+    class D,E fuente
+    class RES,OK ok
+    class NO bad
+    style VOS fill:transparent,stroke:#7C3AED,stroke-dasharray:4 4
+    style KIT fill:transparent,stroke:#2563EB
+    style FUENTE fill:transparent,stroke:#D97706,stroke-dasharray:4 4
 ```
 
-Cuatro tipos de pieza, cada una con su rol:
+Dos caminos, un mismo kit: **tu prompt** entra por el hook que sugiere la skill correcta, y las
+skills producen código calibrado por la fuente de verdad; **tu commit** entra por el gate, y solo
+pasa si los checks determinísticos dan verde. Cuatro tipos de pieza, cada una con su rol:
 
 | Pieza | Qué es | Cuándo actúa |
 |---|---|---|
@@ -98,12 +134,22 @@ Instalá el tooling de Claude Code desde <ruta>/paw-claude-kit:
 
 ```mermaid
 flowchart LR
-    A["/plan<br/>plan por fases"] --> B["/impl<br/>código fase a fase"]
-    B --> C["/gp<br/>reglas del corrector"]
-    C --> D["git commit"]
-    D --> E{"commit-gate"}
-    E -- "checks OK" --> F["commit ✔"]
-    E -- "falla" --> C
+    ID(["💡 feature nueva"]) --> PL["/plan<br/><i>plan por fases</i>"]
+    PL --> IM["/impl<br/><i>código fase a fase</i>"]
+    IM --> GP["/gp<br/><i>reglas del corrector</i>"]
+    GP --> CM(["📦 git commit"])
+    CM --> GT{{"🪝 commit-gate<br/>paw_checks.py"}}
+    GT -- "✅ checks OK" --> OK(["commit ✔"])
+    GT -- "❌ falla" --> GP
+
+    classDef vos fill:#EDE9FE,stroke:#7C3AED,color:#312E81
+    classDef kit fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A
+    classDef gate fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E
+    classDef ok fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    class ID,CM vos
+    class PL,IM,GP kit
+    class GT gate
+    class OK ok
 ```
 
 | Momento | Qué hacés |
@@ -126,12 +172,19 @@ reglas de JSP, genera puro falso positivo. El kit es **etapa-aware**: declarás 
 
 ```mermaid
 flowchart LR
-    E1["Entrega 1<br/><b>Spring JDBC</b><br/>JdbcTemplate · RowMapper"]
-    E2["Entrega 2<br/><b>JPA / Hibernate</b><br/>entidades · EntityManager"]
-    EF["Entrega Final<br/><b>API REST + SPA</b><br/>Jersey · JWT · frontend"]
+    E1["📗 <b>Entrega 1 — Spring JDBC</b><br/>JdbcTemplate · RowMapper<br/>modelos inmutables"]
+    E2["📘 <b>Entrega 2 — JPA / Hibernate</b><br/>entidades · EntityManager<br/>las 9 trampas TP2"]
+    EF["📕 <b>Entrega Final — API REST + SPA</b><br/>Jersey · JWT · DTOs con links<br/>frontend aparte"]
 
-    E1 -- "skill /jdbc-to-jpa<br/>(un agregado por vez)" --> E2
-    E2 -- "contrato REST primero,<br/>backend por olas ⇄ SPA en espejo" --> EF
+    E1 == "/jdbc-to-jpa<br/>un agregado por vez" ==> E2
+    E2 == "contrato REST primero,<br/>backend por olas ⇄ SPA" ==> EF
+
+    classDef e1 fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef e2 fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A
+    classDef ef fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    class E1 e1
+    class E2 e2
+    class EF ef
 ```
 
 ```markdown
@@ -159,10 +212,10 @@ Empezá por [`etapas/README.md`](etapas/README.md).
 | [`commit-gate.py`](claude/hooks/commit-gate.py) | `PreToolUse` | Todo `git commit` corre los checks primero; si fallan, bloquea el commit con el detalle. Bypass: `PAW_SKIP_SMOKE=1 git commit ...` |
 | [`db-server-guard.py`](claude/hooks/db-server-guard.py) | `PreToolUse` | Impide que Claude corra `psql`/`pg_*`/`jetty:run` por su cuenta — lo obliga a darte el comando listo para copiar, con preview antes de lo destructivo. Bypass: `PAW_ALLOW_DB=1` |
 
-Los cuatro se apoyan en [`paw_checks.py`](claude/scripts/paw_checks.py), el script de checks
-determinísticos que corre en segundos: **paridad de keys i18n** entre los 4 bundles (una key
-coja = `JasperException` en runtime), **versiones Flyway duplicadas** (la app no bootea) y
-**balance de tags JSTL** en JSPs (500 que `mvn test` no atrapa).
+`commit-gate` e `i18n-parity` se apoyan en [`paw_checks.py`](claude/scripts/paw_checks.py), el
+script de checks determinísticos que corre en segundos: **paridad de keys i18n** entre los 4
+bundles (una key coja = `JasperException` en runtime), **versiones Flyway duplicadas** (la app
+no bootea) y **balance de tags JSTL** en JSPs (500 que `mvn test` no atrapa).
 [`settings-fragment.json`](settings-fragment.json) registra los 4 hooks + una allowlist de
 permisos frecuentes (mvn, grep, git...).
 
@@ -176,7 +229,7 @@ permisos frecuentes (mvn, grep, git...).
 | [`feature-engineering`](claude/skills/feature-engineering/SKILL.md) | `/feature-engineering` | Entrevista de descubrimiento: idea vaga → spec implementable |
 | [`planning`](claude/skills/planning/SKILL.md) | `/plan` | Plan fase-a-fase de una feature (models → persistence → services → validators → controllers → views → tests) |
 | [`implementation`](claude/skills/implementation/SKILL.md) | `/impl` | Ejecuta un plan fase por fase respetando las convenciones del curso |
-| [`jdbc-to-jpa`](claude/skills/jdbc-to-jpa/SKILL.md) | `/migrate` | Migra la persistencia JDBC → JPA un agregado por vez (entidades, JpaDao, 1+1, tests con `em.flush()`, swap de bean) |
+| [`jdbc-to-jpa`](claude/skills/jdbc-to-jpa/SKILL.md) | `/jdbc-to-jpa` (alias `/migrate`) | Migra la persistencia JDBC → JPA un agregado por vez (entidades, JpaDao, 1+1, tests con `em.flush()`, swap de bean) |
 </details>
 
 <details open>
@@ -241,11 +294,18 @@ python3 tools/export.py --target agents --out /ruta/a/tu/repo   # AGENTS.md gen�
 
 ```mermaid
 flowchart LR
-    K["paw-claude-kit<br/>(nativo Claude Code)"]
-    K -- "--target codex" --> CX["AGENTS.md<br/>.codex/prompts/*.md"]
-    K -- "--target gemini" --> GM["GEMINI.md<br/>.gemini/commands/paw/*.toml"]
-    K -- "--target agents" --> AG["AGENTS.md genérico<br/>prompts/*.md<br/>(Cursor · Windsurf · aider)"]
-    K -- "siempre" --> PCM["tools/paw_checks.py +<br/>pre-commit hook de git"]
+    K["🧰 <b>PAW-AgenticCoding-Kit</b><br/><i>nativo Claude Code</i>"]
+    K == "--target codex" ==> CX["AGENTS.md<br/>.codex/prompts/*.md"]
+    K == "--target gemini" ==> GM["GEMINI.md<br/>.gemini/commands/paw/*.toml"]
+    K == "--target agents" ==> AG["AGENTS.md genérico + prompts/*.md<br/>Cursor · Windsurf · aider"]
+    K -. "siempre" .-> PCM["tools/paw_checks.py<br/>+ pre-commit hook de git"]
+
+    classDef kit fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A
+    classDef tgt fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef chk fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E
+    class K kit
+    class CX,GM,AG tgt
+    class PCM chk
 ```
 
 Las 18 skills se convierten en comandos/prompts del tool destino, las reglas operativas van a un
