@@ -1,27 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 342" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif">
-<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#898781"/></marker></defs>
-<rect x="0" y="0" width="1160" height="342" rx="12" fill="#1a1a19"/>
-<rect x="24" y="126" width="236" height="90" rx="7" fill="rgba(57,135,229,0.07)" stroke="#3987e5" stroke-width="1.5"/>
-<text x="142.0" y="166.5" font-size="13" font-weight="600" text-anchor="middle" fill="#ffffff">PAW-AgenticCoding-Kit</text>
-<text x="142.0" y="183.5" font-size="11.5" font-style="italic" text-anchor="middle" fill="#c3c2b7">nativo Claude Code</text>
-<rect x="620" y="24" width="516" height="60" rx="7" fill="rgba(217,89,38,0.08)" stroke="#d95926" stroke-width="1.5"/>
-<text x="878.0" y="49.5" font-size="12" font-weight="600" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#ffffff">AGENTS.md</text>
-<text x="878.0" y="66.5" font-size="11" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#c3c2b7">.codex/prompts/*.md</text>
-<path d="M 260 171 C 400 171, 470 54, 614 54" fill="none" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-<text x="437" y="104.5" font-size="11" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" stroke="#1a1a19" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#898781">--target codex</text>
-<rect x="620" y="102" width="516" height="60" rx="7" fill="rgba(217,89,38,0.08)" stroke="#d95926" stroke-width="1.5"/>
-<text x="878.0" y="127.5" font-size="12" font-weight="600" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#ffffff">GEMINI.md</text>
-<text x="878.0" y="144.5" font-size="11" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#c3c2b7">.gemini/commands/paw/*.toml</text>
-<path d="M 260 171 C 400 171, 470 132, 614 132" fill="none" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-<text x="437" y="143.5" font-size="11" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" stroke="#1a1a19" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#898781">--target gemini</text>
-<rect x="620" y="180" width="516" height="60" rx="7" fill="rgba(217,89,38,0.08)" stroke="#d95926" stroke-width="1.5"/>
-<text x="878.0" y="205.5" font-size="12" font-weight="600" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#ffffff">AGENTS.md genérico + prompts/*.md</text>
-<text x="878.0" y="222.5" font-size="11.5" text-anchor="middle" fill="#c3c2b7">Cursor · Windsurf · aider</text>
-<path d="M 260 171 C 400 171, 470 210, 614 210" fill="none" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-<text x="437" y="182.5" font-size="11" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" stroke="#1a1a19" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#898781">--target agents</text>
-<rect x="620" y="258" width="516" height="60" rx="7" fill="rgba(25,158,112,0.08)" stroke="#199e70" stroke-width="1.5"/>
-<text x="878.0" y="283.5" font-size="12" font-weight="600" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#ffffff">tools/paw_checks.py</text>
-<text x="878.0" y="300.5" font-size="11.5" text-anchor="middle" fill="#c3c2b7">+ pre-commit hook de git</text>
-<path d="M 260 171 C 400 171, 470 288, 614 288" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arr)"/>
-<text x="437" y="221.5" font-size="11" text-anchor="middle" stroke="#1a1a19" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#898781">siempre</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 342" font-family="Newsreader, Georgia, &#39;Times New Roman&#39;, serif">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#a1a1aa"/></marker></defs>
+<rect x="0" y="0" width="1160" height="342" rx="12" fill="#382519"/>
+<rect x="24" y="126" width="236" height="90" rx="7" fill="rgba(146,207,242,0.10)" stroke="#92cff2" stroke-width="1.5"/>
+<text x="142.0" y="166.5" font-size="12.5" font-weight="600" text-anchor="middle" fill="#ffffff">PAW-AgenticCoding-Kit</text>
+<text x="142.0" y="183.5" font-size="12" font-style="italic" text-anchor="middle" fill="#a1a1aa">nativo Claude Code</text>
+<rect x="620" y="24" width="516" height="60" rx="7" fill="rgba(244,124,89,0.10)" stroke="#f47c59" stroke-width="1.5"/>
+<text x="878.0" y="49.5" font-size="12" font-weight="600" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#ffffff">AGENTS.md</text>
+<text x="878.0" y="66.5" font-size="10.5" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#a1a1aa">.codex/prompts/*.md</text>
+<path d="M 260 171 C 400 171, 470 54, 614 54" fill="none" stroke="#a1a1aa" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="437" y="104.5" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" stroke="#382519" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#a1a1aa">--target codex</text>
+<rect x="620" y="102" width="516" height="60" rx="7" fill="rgba(244,124,89,0.10)" stroke="#f47c59" stroke-width="1.5"/>
+<text x="878.0" y="127.5" font-size="12" font-weight="600" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#ffffff">GEMINI.md</text>
+<text x="878.0" y="144.5" font-size="10.5" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#a1a1aa">.gemini/commands/paw/*.toml</text>
+<path d="M 260 171 C 400 171, 470 132, 614 132" fill="none" stroke="#a1a1aa" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="437" y="143.5" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" stroke="#382519" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#a1a1aa">--target gemini</text>
+<rect x="620" y="180" width="516" height="60" rx="7" fill="rgba(244,124,89,0.10)" stroke="#f47c59" stroke-width="1.5"/>
+<text x="878.0" y="205.5" font-size="12" font-weight="600" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#ffffff">AGENTS.md genérico + prompts/*.md</text>
+<text x="878.0" y="222.5" font-size="12" text-anchor="middle" fill="#a1a1aa">Cursor · Windsurf · aider</text>
+<path d="M 260 171 C 400 171, 470 210, 614 210" fill="none" stroke="#a1a1aa" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="437" y="182.5" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" stroke="#382519" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#a1a1aa">--target agents</text>
+<rect x="620" y="258" width="516" height="60" rx="7" fill="rgba(47,159,143,0.10)" stroke="#2f9f8f" stroke-width="1.5"/>
+<text x="878.0" y="283.5" font-size="12" font-weight="600" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#ffffff">tools/paw_checks.py</text>
+<text x="878.0" y="300.5" font-size="12" text-anchor="middle" fill="#a1a1aa">+ pre-commit hook de git</text>
+<path d="M 260 171 C 400 171, 470 288, 614 288" fill="none" stroke="#a1a1aa" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arr)"/>
+<text x="437" y="221.5" text-anchor="middle" font-style="italic" font-size="11" stroke="#382519" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#a1a1aa">siempre</text>
 </svg>

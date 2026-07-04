@@ -1,60 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 548" font-family="system-ui, -apple-system, &#39;Segoe UI&#39;, sans-serif">
-<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#898781"/></marker></defs>
-<rect x="0" y="0" width="1160" height="548" rx="12" fill="#fcfcfb"/>
-<rect x="368" y="24" width="456" height="118" rx="10" fill="rgba(237,161,0,0.05)" stroke="#eda100" stroke-width="1.5"/>
-<rect x="384" y="39" width="9" height="9" rx="2" fill="#eda100"/>
-<text x="400" y="48" font-size="11" font-weight="700" letter-spacing="1.5" fill="#52514e">FUENTE DE VERDAD</text>
-<rect x="384" y="56" width="204" height="68" rx="7" fill="#ffffff" stroke="#e1e0d9" stroke-width="1"/>
-<text x="486.0" y="85.5" font-size="13" font-weight="600" text-anchor="middle" fill="#0b0b0b">docs/</text>
-<text x="486.0" y="102.5" font-size="11.5" text-anchor="middle" fill="#52514e">convenciones de la cátedra</text>
-<rect x="604" y="56" width="204" height="68" rx="7" fill="#ffffff" stroke="#e1e0d9" stroke-width="1"/>
-<text x="706.0" y="85.5" font-size="12" font-weight="600" text-anchor="middle" fill="#0b0b0b">ETAPA ACTUAL — CLAUDE.md</text>
-<text x="706.0" y="102.5" font-size="11.5" text-anchor="middle" fill="#52514e">JDBC → JPA → SPA+REST</text>
-<rect x="328" y="210" width="520" height="310" rx="10" fill="rgba(42,120,214,0.04)" stroke="#2a78d6" stroke-width="1.5"/>
-<rect x="344" y="225" width="9" height="9" rx="2" fill="#2a78d6"/>
-<text x="360" y="234" font-size="11" font-weight="700" letter-spacing="1.5" fill="#52514e">EL KIT<tspan font-weight="400" letter-spacing="0.2" fill="#898781">&#160;&#160;vive en .claude/ de tu repo</tspan></text>
-<rect x="352" y="262" width="204" height="64" rx="7" fill="#ffffff" stroke="#e1e0d9" stroke-width="1"/>
-<text x="454.0" y="289.5" font-size="13" font-weight="600" text-anchor="middle" fill="#0b0b0b">skill-autolaunch</text>
-<text x="454.0" y="306.5" font-size="11.5" font-style="italic" text-anchor="middle" fill="#52514e">sugiere la skill correcta</text>
-<rect x="616" y="250" width="208" height="88" rx="7" fill="#ffffff" stroke="#e1e0d9" stroke-width="1"/>
-<text x="720.0" y="281.0" font-size="13" font-weight="600" text-anchor="middle" fill="#0b0b0b">18 skills</text>
-<text x="720.0" y="298.0" font-size="11.5" text-anchor="middle" fill="#52514e">/plan · /impl · /gp · /deliver</text>
-<text x="720.0" y="315.0" font-size="11.5" text-anchor="middle" fill="#52514e">/corrector · /jdbc-to-jpa …</text>
-<rect x="352" y="414" width="204" height="64" rx="7" fill="#ffffff" stroke="#e1e0d9" stroke-width="1"/>
-<text x="454.0" y="441.5" font-size="13" font-weight="600" text-anchor="middle" fill="#0b0b0b">commit-gate</text>
-<text x="454.0" y="458.5" font-size="11.5" font-style="italic" text-anchor="middle" fill="#52514e">ningún commit sin checks</text>
-<rect x="616" y="414" width="208" height="64" rx="7" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
-<text x="720.0" y="441.5" font-size="13" font-weight="600" text-anchor="middle" fill="#0b0b0b">paw_checks.py</text>
-<text x="720.0" y="458.5" font-size="11.5" text-anchor="middle" fill="#52514e">i18n · Flyway · JSTL</text>
-<line x1="556" y1="294" x2="610" y2="294" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-<line x1="556" y1="446" x2="610" y2="446" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-<rect x="24" y="240" width="244" height="260" rx="10" fill="rgba(74,58,167,0.04)" stroke="#4a3aa7" stroke-width="1.5"/>
-<rect x="40" y="255" width="9" height="9" rx="2" fill="#4a3aa7"/>
-<text x="56" y="264" font-size="11" font-weight="700" letter-spacing="1.5" fill="#52514e">VOS</text>
-<rect x="44" y="272" width="204" height="44" rx="22.0" fill="#ffffff" stroke="#4a3aa7" stroke-width="1.2"/>
-<text x="146.0" y="298.5" font-size="12.5" font-weight="500" text-anchor="middle" fill="#0b0b0b">escribís un prompt</text>
-<rect x="44" y="424" width="204" height="44" rx="22.0" fill="#ffffff" stroke="#4a3aa7" stroke-width="1.2"/>
-<text x="146.0" y="450.5" font-size="12.5" font-weight="500" text-anchor="middle" fill="#0b0b0b">git commit</text>
-<line x1="248" y1="294" x2="346" y2="294" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-<line x1="248" y1="446" x2="346" y2="446" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-<path d="M 486 124 C 486 187, 668 181, 668 244" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arr)"/>
-<path d="M 706 124 C 706 187, 756 181, 756 244" fill="none" stroke="#898781" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arr)"/>
-<text x="536" y="196" font-size="11" text-anchor="end" stroke="#fcfcfb" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#898781">las skills leen</text>
-<text x="776" y="196" font-size="11" text-anchor="start" stroke="#fcfcfb" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#898781">calibra qué exigir</text>
-<rect x="872" y="268" width="264" height="52" rx="24" fill="rgba(12,163,12,0.06)" stroke="#0ca30c" stroke-width="1.2"/>
-<circle cx="898" cy="294.0" r="9" fill="none" stroke="#0ca30c" stroke-width="1.5"/>
-<path d="M 893.5 294.0 l 3 3.2 l 6 -6.4" fill="none" stroke="#0ca30c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="916" y="298.0" font-size="12.5" font-weight="600" fill="#0b0b0b">código según las convenciones</text>
-<rect x="872" y="394" width="264" height="44" rx="22.0" fill="rgba(12,163,12,0.06)" stroke="#0ca30c" stroke-width="1.2"/>
-<circle cx="898" cy="416.0" r="9" fill="none" stroke="#0ca30c" stroke-width="1.5"/>
-<path d="M 893.5 416.0 l 3 3.2 l 6 -6.4" fill="none" stroke="#0ca30c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="916" y="420.0" font-size="12.5" font-weight="600" fill="#0b0b0b">commit pasa</text>
-<rect x="872" y="458" width="264" height="56" rx="24" fill="rgba(208,59,59,0.06)" stroke="#d03b3b" stroke-width="1.2"/>
-<circle cx="898" cy="486.0" r="9" fill="none" stroke="#d03b3b" stroke-width="1.5"/>
-<path d="M 894.5 482.5 l 7 7 M 901.5 482.5 l -7 7" fill="none" stroke="#d03b3b" stroke-width="2" stroke-linecap="round"/>
-<text x="916" y="481.5" font-size="12.5" font-weight="600" fill="#0b0b0b">commit bloqueado</text>
-<text x="916" y="498.5" font-size="11.5" fill="#52514e">arreglás y reintentás</text>
-<line x1="824" y1="294" x2="866" y2="294" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-<line x1="824" y1="440" x2="866" y2="418" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
-<line x1="824" y1="452" x2="866" y2="482" stroke="#898781" stroke-width="1.5" marker-end="url(#arr)"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 548" font-family="Newsreader, Georgia, &#39;Times New Roman&#39;, serif">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 1 L 9 5 L 0 9 z" fill="#8a7f78"/></marker></defs>
+<rect x="0" y="0" width="1160" height="548" rx="12" fill="#f6f5f3"/>
+<rect x="368" y="24" width="456" height="118" rx="10" fill="rgba(162,130,87,0.08)" stroke="#a28257" stroke-width="1.5"/>
+<rect x="384" y="39" width="9" height="9" rx="2" fill="#a28257"/>
+<text x="400" y="48" font-size="10.5" font-weight="700" letter-spacing="2" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#7c716b">FUENTE DE VERDAD</text>
+<rect x="384" y="56" width="204" height="68" rx="7" fill="#ffffff" stroke="#e5e2e1" stroke-width="1"/>
+<text x="486.0" y="85.5" font-size="12" font-weight="600" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#241208">docs/</text>
+<text x="486.0" y="102.5" font-size="12" text-anchor="middle" fill="#7c716b">convenciones de la cátedra</text>
+<rect x="604" y="56" width="204" height="68" rx="7" fill="#ffffff" stroke="#e5e2e1" stroke-width="1"/>
+<text x="706.0" y="85.5" font-size="10.5" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#7c716b">ETAPA ACTUAL — CLAUDE.md</text>
+<text x="706.0" y="102.5" font-size="12" text-anchor="middle" fill="#7c716b">JDBC → JPA → SPA+REST</text>
+<rect x="328" y="210" width="520" height="310" rx="10" fill="rgba(97,122,137,0.08)" stroke="#617a89" stroke-width="1.5"/>
+<rect x="344" y="225" width="9" height="9" rx="2" fill="#617a89"/>
+<text x="360" y="234" font-size="10.5" font-weight="700" letter-spacing="2" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#7c716b">EL KIT<tspan font-weight="400" letter-spacing="0.3" font-family="Newsreader, Georgia, &#39;Times New Roman&#39;, serif" font-style="italic" font-size="12" fill="#8a7f78">&#160;&#160;vive en .claude/ de tu repo</tspan></text>
+<rect x="352" y="262" width="204" height="64" rx="7" fill="#ffffff" stroke="#e5e2e1" stroke-width="1"/>
+<text x="454.0" y="289.5" font-size="12" font-weight="600" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#241208">skill-autolaunch</text>
+<text x="454.0" y="306.5" font-size="12" font-style="italic" text-anchor="middle" fill="#7c716b">sugiere la skill correcta</text>
+<rect x="616" y="250" width="208" height="88" rx="7" fill="#ffffff" stroke="#e5e2e1" stroke-width="1"/>
+<text x="720.0" y="281.0" font-size="14" font-weight="600" text-anchor="middle" fill="#241208">18 skills</text>
+<text x="720.0" y="298.0" font-size="10.5" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#7c716b">/plan · /impl · /gp · /deliver</text>
+<text x="720.0" y="315.0" font-size="10.5" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#7c716b">/corrector · /jdbc-to-jpa …</text>
+<rect x="352" y="414" width="204" height="64" rx="7" fill="#ffffff" stroke="#e5e2e1" stroke-width="1"/>
+<text x="454.0" y="441.5" font-size="12" font-weight="600" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#241208">commit-gate</text>
+<text x="454.0" y="458.5" font-size="12" font-style="italic" text-anchor="middle" fill="#7c716b">ningún commit sin checks</text>
+<rect x="616" y="414" width="208" height="64" rx="7" fill="#ffffff" stroke="#2d8a7b" stroke-width="1.5"/>
+<text x="720.0" y="441.5" font-size="12" font-weight="600" text-anchor="middle" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#241208">paw_checks.py</text>
+<text x="720.0" y="458.5" font-size="12" text-anchor="middle" fill="#7c716b">i18n · Flyway · JSTL</text>
+<line x1="556" y1="294" x2="610" y2="294" stroke="#8a7f78" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="556" y1="446" x2="610" y2="446" stroke="#8a7f78" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="24" y="240" width="244" height="260" rx="10" fill="rgba(165,84,58,0.06)" stroke="#a5543a" stroke-width="1.5"/>
+<rect x="40" y="255" width="9" height="9" rx="2" fill="#a5543a"/>
+<text x="56" y="264" font-size="10.5" font-weight="700" letter-spacing="2" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" fill="#7c716b">VOS</text>
+<rect x="44" y="272" width="204" height="44" rx="22.0" fill="#ffffff" stroke="#a5543a" stroke-width="1.2"/>
+<text x="146.0" y="298.5" font-size="13" font-weight="500" text-anchor="middle" fill="#241208">escribís un prompt</text>
+<rect x="44" y="424" width="204" height="44" rx="22.0" fill="#ffffff" stroke="#a5543a" stroke-width="1.2"/>
+<text x="146.0" y="450.5" font-family="&#39;JetBrains Mono&#39;, ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" font-weight="500" text-anchor="middle" fill="#241208">git commit</text>
+<line x1="248" y1="294" x2="346" y2="294" stroke="#8a7f78" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="248" y1="446" x2="346" y2="446" stroke="#8a7f78" stroke-width="1.5" marker-end="url(#arr)"/>
+<path d="M 486 124 C 486 187, 668 181, 668 244" fill="none" stroke="#8a7f78" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arr)"/>
+<path d="M 706 124 C 706 187, 756 181, 756 244" fill="none" stroke="#8a7f78" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arr)"/>
+<text x="536" y="196" text-anchor="end" font-style="italic" font-size="11" stroke="#f6f5f3" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#8a7f78">las skills leen</text>
+<text x="776" y="196" text-anchor="start" font-style="italic" font-size="11" stroke="#f6f5f3" stroke-width="5" paint-order="stroke" stroke-linejoin="round" fill="#8a7f78">calibra qué exigir</text>
+<rect x="872" y="268" width="264" height="52" rx="24" fill="rgba(63,138,90,0.08)" stroke="#3f8a5a" stroke-width="1.2"/>
+<circle cx="898" cy="294.0" r="9" fill="none" stroke="#3f8a5a" stroke-width="1.5"/>
+<path d="M 893.5 294.0 l 3 3.2 l 6 -6.4" fill="none" stroke="#3f8a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="916" y="298.0" font-size="13" font-weight="600" fill="#241208">código según las convenciones</text>
+<rect x="872" y="394" width="264" height="44" rx="22.0" fill="rgba(63,138,90,0.08)" stroke="#3f8a5a" stroke-width="1.2"/>
+<circle cx="898" cy="416.0" r="9" fill="none" stroke="#3f8a5a" stroke-width="1.5"/>
+<path d="M 893.5 416.0 l 3 3.2 l 6 -6.4" fill="none" stroke="#3f8a5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="916" y="420.0" font-size="13" font-weight="600" fill="#241208">commit pasa</text>
+<rect x="872" y="458" width="264" height="56" rx="24" fill="rgba(143,93,83,0.07)" stroke="#8f5d53" stroke-width="1.2"/>
+<circle cx="898" cy="486.0" r="9" fill="none" stroke="#8f5d53" stroke-width="1.5"/>
+<path d="M 894.5 482.5 l 7 7 M 901.5 482.5 l -7 7" fill="none" stroke="#8f5d53" stroke-width="2" stroke-linecap="round"/>
+<text x="916" y="481.5" font-size="13" font-weight="600" fill="#241208">commit bloqueado</text>
+<text x="916" y="498.5" font-size="11.5" fill="#7c716b">arreglás y reintentás</text>
+<line x1="824" y1="294" x2="866" y2="294" stroke="#8a7f78" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="824" y1="440" x2="866" y2="418" stroke="#8a7f78" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="824" y1="452" x2="866" y2="482" stroke="#8a7f78" stroke-width="1.5" marker-end="url(#arr)"/>
 </svg>
