@@ -278,7 +278,8 @@ pre code{background:none;border:none;padding:0}
 .term-dot{width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,#ffffff 14%,transparent)}
 .term-dot:nth-child(1){background:#e5534b99}.term-dot:nth-child(2){background:#c6902299}.term-dot:nth-child(3){background:#57ab5a99}
 .term-title{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;color:var(--code-fg);margin-left:6px}
-.term-body{font-family:var(--font-mono);font-size:12.5px;line-height:1.75;padding:16px 18px;overflow-x:auto;white-space:pre;color:var(--code-fg)}
+.term-body{font-family:var(--font-mono);font-size:12.5px;line-height:1.75;padding:16px 18px;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--code-fg)}
+.term-body pre{white-space:pre-wrap;overflow-wrap:anywhere}
 .t-cmd{color:var(--term-bright)}
 .t-cmd::before{content:"$ ";color:var(--hex-coral);font-weight:600}
 .t-ok{color:var(--t-ok)}.t-err{color:var(--t-err)}.t-dim{color:var(--code-fg);opacity:.75}.t-hl{color:var(--t-hl)}
@@ -326,7 +327,7 @@ pre code{background:none;border:none;padding:0}
 pre.code{
   background:var(--code-bg);border:1px solid var(--code-hairline);border-radius:var(--r-card);
   padding:16px 18px;font-family:var(--font-mono);font-size:12.5px;line-height:1.7;
-  overflow-x:auto;color:var(--term-bright);box-shadow:var(--shadow-md);
+  white-space:pre-wrap;overflow-wrap:anywhere;color:var(--term-bright);box-shadow:var(--shadow-md);
 }
 .copy-wrap{position:relative}
 .copy-btn{
@@ -482,7 +483,6 @@ pre.code{
 
   /* terminal protagonista: contenido intacto, el shell la pinta como code block */
   .historia-hero-term .term-body {
-    overflow-x: auto;
     font-size: clamp(0.72rem, 0.66rem + 0.35vw, 0.86rem);
     line-height: 1.65;
   }
