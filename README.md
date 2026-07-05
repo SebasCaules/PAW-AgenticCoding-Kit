@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <img src="assets/logo-light.svg" width="88" alt="paw-claude-kit: una huella cuya almohadilla central es un prompt de terminal (>_)">
+  </picture>
+</p>
+
 # PAW-AgenticCoding-Kit
 
 Tooling de agentic coding para cursar PAW (Proyecto de Aplicaciones Web, ITBA): 18 skills,

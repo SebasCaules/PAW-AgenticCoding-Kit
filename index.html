@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>paw-claude-kit — manual de supervivencia para cursar PAW con agentes</title>
 <meta name="description" content="18 skills, 4 hooks y checks determinísticos para cursar PAW (ITBA) con Claude Code — nacido de una meta-auditoría de ~113 sesiones sobre un TP real.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23241208'/%3E%3Cg transform='translate(4.8 4.8) scale(.85)'%3E%3Cg fill='%2392cff2'%3E%3Cellipse cx='11.8' cy='26.3' rx='5.4' ry='7.2' transform='rotate(-24 11.8 26.3)'/%3E%3Cellipse cx='24.6' cy='16.6' rx='5.7' ry='7.8' transform='rotate(-9 24.6 16.6)'/%3E%3Cellipse cx='39.4' cy='16.6' rx='5.7' ry='7.8' transform='rotate(9 39.4 16.6)'/%3E%3Cellipse cx='52.2' cy='26.3' rx='5.4' ry='7.2' transform='rotate(24 52.2 26.3)'/%3E%3C/g%3E%3Cmask id='p'%3E%3Crect x='16.5' y='31' width='31' height='25' rx='7.5' fill='%23fff'/%3E%3Cpath d='M24.5 38 32.5 43.5 24.5 49' fill='none' stroke='%23000' stroke-width='4.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='36' y='46.8' width='6.4' height='4.2' rx='2.1' fill='%23000'/%3E%3C/mask%3E%3Crect x='16.5' y='31' width='31' height='25' rx='7.5' fill='%23f47c59' mask='url(%23p)'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -237,11 +238,9 @@ pre code{background:none;border:none;padding:0}
 .nav.scrolled{border-bottom-color:var(--hairline)}
 .nav-inner{max-width:1120px;height:100%;margin-inline:auto;padding-inline:clamp(18px,4vw,32px);display:flex;align-items:center;gap:14px}
 .nav-logo{font-family:var(--font-mono);font-weight:600;font-size:13px;letter-spacing:.02em;color:var(--ink-strong);text-decoration:none;white-space:nowrap;display:flex;align-items:center;gap:9px}
-.nav-logo::before{
-  content:"";width:15px;height:14px;background:var(--accent);
-  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='15.5' rx='5.2' ry='4.6'/%3E%3Cellipse cx='4.6' cy='10' rx='2.3' ry='3' transform='rotate(-18 4.6 10)'/%3E%3Cellipse cx='9.4' cy='6.4' rx='2.3' ry='3.1' transform='rotate(-6 9.4 6.4)'/%3E%3Cellipse cx='14.8' cy='6.4' rx='2.3' ry='3.1' transform='rotate(6 14.8 6.4)'/%3E%3Cellipse cx='19.5' cy='10' rx='2.3' ry='3' transform='rotate(18 19.5 10)'/%3E%3C/svg%3E") no-repeat center/contain;
-  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='15.5' rx='5.2' ry='4.6'/%3E%3Cellipse cx='4.6' cy='10' rx='2.3' ry='3' transform='rotate(-18 4.6 10)'/%3E%3Cellipse cx='9.4' cy='6.4' rx='2.3' ry='3.1' transform='rotate(-6 9.4 6.4)'/%3E%3Cellipse cx='14.8' cy='6.4' rx='2.3' ry='3.1' transform='rotate(6 14.8 6.4)'/%3E%3Cellipse cx='19.5' cy='10' rx='2.3' ry='3' transform='rotate(18 19.5 10)'/%3E%3C/svg%3E") no-repeat center/contain;
-}
+.nav-logo svg{width:17px;height:17px;flex:none}
+.logo-toes{fill:var(--link)}
+.logo-pad{fill:var(--accent-text)}
 .nav-logo .p{color:var(--accent-text)}
 .nav-sys{
   font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.08em;
@@ -375,7 +374,8 @@ pre.code{
 .footer .container{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
 .footer a{color:var(--link);text-decoration:none}
 .footer a:hover{text-decoration:underline}
-.footer-logo{font-family:var(--font-mono);font-size:12px;color:var(--ink-strong)}
+.footer-logo{font-family:var(--font-mono);font-size:12px;color:var(--ink-strong);display:inline-flex;align-items:center;gap:8px}
+.footer-logo svg{width:15px;height:15px;flex:none}
 .footer-logo .p{color:var(--accent-text)}
 
 @media (max-width:820px){
@@ -396,7 +396,7 @@ pre.code{
 
 <nav class="nav" aria-label="Secciones">
   <div class="nav-inner">
-    <a class="nav-logo" href="#top"><span class="p">paw</span>-claude-kit</a>
+    <a class="nav-logo" href="#top"><svg viewBox="0 0 64 64" aria-hidden="true"><g class="logo-toes"><ellipse cx="11.8" cy="26.3" rx="5.4" ry="7.2" transform="rotate(-24 11.8 26.3)"/><ellipse cx="24.6" cy="16.6" rx="5.7" ry="7.8" transform="rotate(-9 24.6 16.6)"/><ellipse cx="39.4" cy="16.6" rx="5.7" ry="7.8" transform="rotate(9 39.4 16.6)"/><ellipse cx="52.2" cy="26.3" rx="5.4" ry="7.2" transform="rotate(24 52.2 26.3)"/></g><mask id="pawcut-nav"><rect x="16.5" y="31" width="31" height="25" rx="7.5" fill="#fff"/><path d="M24.5 38 32.5 43.5 24.5 49" fill="none" stroke="#000" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="36" y="46.8" width="6.4" height="4.2" rx="2.1" fill="#000"/></mask><rect class="logo-pad" x="16.5" y="31" width="31" height="25" rx="7.5" mask="url(#pawcut-nav)"/></svg><span><span class="p">paw</span>-claude-kit</span></a>
     <span class="nav-sys">SYS.01 // <b>PAW</b> · 18 skills · 4 hooks</span>
     <div class="nav-links">
       <a href="#problema">El problema</a>
@@ -2693,7 +2693,7 @@ python3 tools/export.py --target agents --out /ruta/a/tu/repo   # AGENTS.md gen�
 
 <footer class="footer">
   <div class="container">
-    <span class="footer-logo"><span class="p">paw</span>-claude-kit</span>
+    <span class="footer-logo"><svg viewBox="0 0 64 64" aria-hidden="true"><g class="logo-toes"><ellipse cx="11.8" cy="26.3" rx="5.4" ry="7.2" transform="rotate(-24 11.8 26.3)"/><ellipse cx="24.6" cy="16.6" rx="5.7" ry="7.8" transform="rotate(-9 24.6 16.6)"/><ellipse cx="39.4" cy="16.6" rx="5.7" ry="7.8" transform="rotate(9 39.4 16.6)"/><ellipse cx="52.2" cy="26.3" rx="5.4" ry="7.2" transform="rotate(24 52.2 26.3)"/></g><mask id="pawcut-footer"><rect x="16.5" y="31" width="31" height="25" rx="7.5" fill="#fff"/><path d="M24.5 38 32.5 43.5 24.5 49" fill="none" stroke="#000" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="36" y="46.8" width="6.4" height="4.2" rx="2.1" fill="#000"/></mask><rect class="logo-pad" x="16.5" y="31" width="31" height="25" rx="7.5" mask="url(#pawcut-footer)"/></svg><span><span class="p">paw</span>-claude-kit</span></span>
     <span>Grupo 10 · PAW 2026-1C · ITBA — construido y validado durante la cursada real.</span>
   </div>
 </footer>
